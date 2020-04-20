@@ -17,7 +17,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +30,33 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+  
+  public class Row {
+    private String column1;
+    private String column2;
+    private String column3;
+
+    public Row (String column1, String column2, String column3) {
+        this.column1 = column1;
+        this.column2 = column2;
+        this.column3 = column3;
+    }
+    
+
+    public String getColumn1() {
+      return column1;
+    }
+
+    public String getColumn2() {
+      return column2;
+    }
+
+    public String getColumn3() {
+      return column3;
+    }
+
+}
+  
     // store any command-line arguments that were entered.
     // NOTE: this.getParameters().getRaw() will get these also
     private List<String> args;
@@ -109,6 +139,40 @@ public class Main extends Application {
 
             
             root.setLeft(outer_vbox);
+            
+            //create items for table view
+            TableView table = new TableView();
+            
+            Label tableTitle = new Label("Report");
+            tableTitle.setFont(textFont);
+            
+            TableColumn farm = new TableColumn("Farm ID");
+            farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
+            TableColumn weight = new TableColumn("Total Weight");
+            weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
+            TableColumn percentage = new TableColumn("Percentage");
+            percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
+            
+            table.getColumns().addAll(farm, weight, percentage);
+            
+            Row row1 = new Row("Farm1", "100", "25");
+            Row row2 = new Row("Farm2", "80", "20");
+            Row row3 = new Row("Farm3", "40", "10");
+            Row row4 = new Row("Farm4", "20", "5");
+            Row row5 = new Row("Farm5", "160", "40");
+            
+            table.getItems().addAll(row1, row2, row3, row4, row5);
+            
+            
+            VBox vbox = new VBox();
+            vbox.setSpacing(5);
+            vbox.setPadding(new Insets(10, 0, 0, 10));
+            vbox.getChildren().addAll(tableTitle, table);
+            
+            root.setRight(vbox);
+            root.setPadding(new Insets(0,100,0, 0));
+     
+            
         // Create Scene
             Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
