@@ -42,13 +42,13 @@ public class Main extends Application {
             title.setAlignment(Pos.CENTER);
 
         // Add the combo box to the left of the root pane
-           root.setLeft(leftPart);
+//           root.setLeft(leftPart);
            
         // Add the ImageView box to the center of the root pane
-            root.setCenter(centerPart);
+//            root.setCenter(centerPart);
             
         // Add the vertical box to the right of the root pane
-            root.setRight(rightPart);
+//            root.setRight(rightPart);
             
             
         // Create Scene
@@ -67,5 +67,3 @@ public class Main extends Application {
            launch(args);
     }
 }
-
-
