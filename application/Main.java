@@ -17,9 +17,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -76,24 +79,35 @@ public class Main extends Application {
             title.setAlignment(Pos.CENTER);
             
             //initialization for essential elements
+  
             Label farmID = new Label("Farm ID: ");
             Label month = new Label("Month: ");
             Label year = new Label("Year: ");
             Label date1 = new Label("Start Date: ");
             Label date2 = new Label("End Date: ");
+            Label sortedLabel = new Label("Sorted by: ");
+            Label file = new Label("File Name: ");
             Label reportLabel = new Label("Choose report Type: ");
-            TextField message = new TextField("DISPLAY MESSAGE");
+            TextArea message = new TextArea("DISPLAY MESSAGE:\n"
+            		+ "Farm report: Fill FarmID and Year \n"
+            		+ "Monthly report: Fill year and month\n"
+            		+ "Annual report: Fill year\n"
+            		+ "Date range report: Fill both start and end dates.\n"
+            		+ "min max, and average for monthly and farm report will be listed here.");
             farmID.setFont(textFont);
             month.setFont(textFont);
             year.setFont(textFont);
             date1.setFont(textFont);
             date2.setFont(textFont);
+            sortedLabel.setFont(textFont);
+            file.setFont(textFont);
             reportLabel.setFont(new Font(16));;
             TextField tf1 = new TextField();
             TextField tf2 = new TextField();
             TextField tf3 = new TextField();
             TextField tf4 = new TextField();
             TextField tf5 = new TextField();
+            TextField fileName = new TextField();
             message.setEditable(false);
             message.setPrefSize(10, 300);//need to resize
             
@@ -109,21 +123,28 @@ public class Main extends Application {
             
             //button to submit info entered
             Button sumbitBtn = new Button("sumbit all");
+            Button loadFile = new Button("load");
+            Button saveFile = new Button("save");
+
+            //hbox to add load/save bottons
+            HBox hboxBtn = new HBox();
+            hboxBtn.getChildren().addAll(loadFile,saveFile);
             
             //vbox for textField labels
             VBox vbox1 = new VBox();
-            vbox1.getChildren().addAll(farmID, month, year, date1, date2);
+            vbox1.getChildren().addAll(file, farmID, month, year, date1, date2);
             
             //vbox for textField
             VBox vbox2 = new VBox();
             vbox2.setSpacing(2);
-            vbox2.getChildren().addAll(tf1,tf2,tf3,tf4,tf5);
+            vbox2.getChildren().addAll(fileName, tf1,tf2,tf3,tf4,tf5);
             
             //vbox for choosing report type and sumbit button
             VBox vbox3 = new VBox();
             vbox3.setSpacing(2);
-            vbox3.getChildren().addAll(reportLabel, reportCbox, sumbitBtn);
-            vbox3.setPadding(new Insets(53,10,0,0));
+            vbox3.getChildren().addAll(hboxBtn,reportLabel, reportCbox, sumbitBtn);
+//            vbox3.setPadding(new Insets(53,10,0,0));
+            
             
             //hbox to manage layout
             HBox hbox = new HBox();
@@ -163,11 +184,31 @@ public class Main extends Application {
             
             table.getItems().addAll(row1, row2, row3, row4, row5);
             
-            
+            //hboxTable for sorting options
+            HBox hboxTable = new HBox();
+            ObservableList<String> sortingOptions = 
+            	    FXCollections.observableArrayList(
+            	    	"default",
+            	        "weight",
+            	        "percentage",
+            	        "farm ID"
+            	    );
+            ComboBox sortingcbox = new ComboBox(sortingOptions);
+            sortingcbox.getSelectionModel().select(0);
             VBox vbox = new VBox();
+            hboxTable.getChildren().addAll(sortedLabel,sortingcbox);
+            hboxTable.setSpacing(10);
+            
+            ToggleGroup tgSorting = new ToggleGroup();;
+            RadioButton sortAscending = new RadioButton("Ascending order");
+            RadioButton sortDescending= new RadioButton("Descending order");
+            sortAscending.setToggleGroup(tgSorting);
+            sortDescending.setToggleGroup(tgSorting);
+            sortAscending.setSelected(true);
+            
             vbox.setSpacing(5);
             vbox.setPadding(new Insets(10, 0, 0, 10));
-            vbox.getChildren().addAll(tableTitle, table);
+            vbox.getChildren().addAll(tableTitle, hboxTable, sortAscending, sortDescending, table);
             
             root.setRight(vbox);
             root.setPadding(new Insets(0,100,0, 0));
