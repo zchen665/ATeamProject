@@ -1,8 +1,8 @@
 REM Some batch file commands for Win10 users to try
 REM replace with path to your javac,java,jar,javafx installations
 
-SET JDK=C:\Program Files\Java\jdk-11.0.6\bin\
-SET JRE=C:\Program Files\Java\jre-10\bin\
+SET JDK=C:\Program Files\Java\jdk-11.0.6\bin
+SET JRE=C:\Program Files\Java\jre-10\bin
 SET JC="%JDK%javac.exe" 
 SET JAVA="%JRE%javaw.exe" 
 SET JAR="%JRE%jar.exe" 
