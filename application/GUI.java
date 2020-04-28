@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,7 +39,7 @@ public class GUI extends BorderPane{
 	FileManagerDummy fManager = new FileManagerDummy();
 	DataManagerDummy dManager = new DataManagerDummy();
 	
-	class Row {
+	public class Row {
 		private String column1;
 		private String column2;
 		private String column3;
@@ -101,6 +102,9 @@ public class GUI extends BorderPane{
 		TextField fileName = new TextField();
 		message.setEditable(false);
 		message.setPrefSize(10, 300);// need to resize
+		
+		TableView table = new TableView();
+		Label tableTitle = new Label("Report");
 
 		// combo box for type of report needed
 		ObservableList<String> options = FXCollections.observableArrayList("Farm Report(max)", "Farm Report(average)", 
@@ -127,6 +131,7 @@ public class GUI extends BorderPane{
 		//request corresponding report.//////////////////////////////////////////////////////
 		//note!!!!!!!!!!need to throw exceptions for incorrect text input
 		submitBtn.setOnAction(e ->{
+		  
 			if (reportCbox.getValue() == null) {
 				message.appendText("\nPlease select the report type first.");
 			}
@@ -155,8 +160,12 @@ public class GUI extends BorderPane{
 					message.appendText("\nPlease fill Year field");
 			}
 			else if(reportCbox.getValue().equals(options.get(0))) {
-				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0)
-					dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText());
+				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0) {
+				  table.refresh();
+				  table.getItems().clear();
+				  table.getItems().removeAll(table.getItems());
+					monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
+				}
 				else
 					message.appendText("\nPlease fill Farm ID and Year fields");
 			}
@@ -214,27 +223,8 @@ public class GUI extends BorderPane{
 		this.setLeft(outer_vbox);
 
 		// create items for table view
-		TableView table = new TableView();
-
-		Label tableTitle = new Label("Report");
-		tableTitle.setFont(textFont);
-
-		TableColumn farm = new TableColumn("Farm ID");
-		farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
-		TableColumn weight = new TableColumn("Total Weight");
-		weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
-		TableColumn percentage = new TableColumn("Percentage");
-		percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
-
-		table.getColumns().addAll(farm, weight, percentage);
-
-//		Row row1 = new Row("Farm1", "100", "25");
-//		Row row2 = new Row("Farm2", "80", "20");
-//		Row row3 = new Row("Farm3", "40", "10");
-//		Row row4 = new Row("Farm4", "20", "5");
-//		Row row5 = new Row("Farm5", "160", "40");
-
-//		table.getItems().addAll(row1, row2, row3, row4, row5);
+		                    
+		
 
 		// hboxTable for sorting options
 		HBox hboxTable = new HBox();
@@ -256,10 +246,45 @@ public class GUI extends BorderPane{
 
 		vbox.setSpacing(5);
 		vbox.setPadding(new Insets(10, 0, 0, 10));
+		vbox.getChildren().clear();
 		vbox.getChildren().addAll(tableTitle, hboxTable, sortAscending, sortDescending, table);
 
 		this.setRight(vbox);
 		this.setPadding(new Insets(0, 100, 0, 0));
 	}
+	
+
+    public void monthlyReport(List<Integer> list, Font textFont, TableView table) {
+      table.refresh();
+      table.getItems().clear();
+      table.getItems().removeAll(table.getItems());
+      TableColumn farm = new TableColumn("Month");
+      farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
+      TableColumn weight = new TableColumn("Total Weight");
+      weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
+      TableColumn percentage = new TableColumn("Percentage");
+      percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
+
+      table.getColumns().addAll(farm, weight, percentage);
+      
+      int sum = 0;
+      for (int i = 0; i < list.size(); i++) {
+        sum = sum + list.get(i);
+      }
+      int month = 1;
+      int monthlyWeight = 0;
+      double monthlyPercentage = 0;
+      for (int j = 0; j < list.size();j++) {
+        String row = "row";
+        monthlyWeight = list.get(j);
+        monthlyPercentage = (double)monthlyWeight/(double)sum;
+        row = row.concat(Integer.toString(j));
+        Row rows = new Row(Integer.toString(month), 
+            Integer.toString(monthlyWeight), 
+            Double.toString(monthlyPercentage));
+        table.getItems().add(rows);
+        month++;
+      }
+    }
 
 }
