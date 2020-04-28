@@ -35,6 +35,9 @@ import javafx.stage.Stage;
 
 public class GUI extends BorderPane{
 	static final String APP_TITLE = "Milk Weight Analyzer";
+	FileManagerDummy fManager = new FileManagerDummy();
+	DataManagerDummy dManager = new DataManagerDummy();
+	
 	class Row {
 		private String column1;
 		private String column2;
@@ -88,7 +91,8 @@ public class GUI extends BorderPane{
 		sortedLabel.setFont(textFont);
 		file.setFont(textFont);
 		reportLabel.setFont(new Font(16));
-		;
+		message.setFont(textFont);
+		
 		TextField tf1 = new TextField();
 		TextField tf2 = new TextField();
 		TextField tf3 = new TextField();
@@ -99,14 +103,36 @@ public class GUI extends BorderPane{
 		message.setPrefSize(10, 300);// need to resize
 
 		// combo box for type of report needed
-		ObservableList<String> options = FXCollections.observableArrayList("Farm Report", "Annual Report",
-				"Monthly Report", "Date Range Report");
+		ObservableList<String> options = FXCollections.observableArrayList("Farm Report(max)", "Farm Report(average)", 
+				"Farm Report(min)", "Annual Report", "Monthly Report(max)", "Monthly Report(average)",
+				"Monthly Report(min)", "Date Range Report");
 		ComboBox reportCbox = new ComboBox(options);
+		
 
 		// button to submit info entered
-		Button sumbitBtn = new Button("sumbit all");
+		Button submitBtn = new Button("sumbit all");
 		Button loadFile = new Button("load");
 		Button saveFile = new Button("save");
+		
+		loadFile.setOnAction(e -> {
+			if(fManager.readFile(fileName.getText())) {
+				message.appendText("\nFile loaded");
+			};
+		});
+		saveFile.setOnAction(e -> {
+			if(fManager.writeToFile(fileName.getText())) {
+				message.appendText("\nFile saved");
+			};
+		});
+		//request corresponding report.//////////////////////////////////////////////////////
+		submitBtn.setOnAction(e ->{
+			if (reportCbox.getValue() == null) {
+				message.appendText("\nPlease select the report type first.");
+			}
+			else if(reportCbox.getValue().equals(options.get(0))){
+				dManager.getMonthlyMaxForFarm()
+			}
+		});
 
 		// hbox to add load/save bottons
 		HBox hboxBtn = new HBox();
@@ -124,7 +150,7 @@ public class GUI extends BorderPane{
 		// vbox for choosing report type and sumbit button
 		VBox vbox3 = new VBox();
 		vbox3.setSpacing(2);
-		vbox3.getChildren().addAll(hboxBtn, reportLabel, reportCbox, sumbitBtn);
+		vbox3.getChildren().addAll(hboxBtn, reportLabel, reportCbox, submitBtn);
 //            vbox3.setPadding(new Insets(53,10,0,0));
 
 		// hbox to manage layout
@@ -175,7 +201,7 @@ public class GUI extends BorderPane{
 		hboxTable.setSpacing(10);
 
 		ToggleGroup tgSorting = new ToggleGroup();
-		;
+		
 		RadioButton sortAscending = new RadioButton("Ascending order");
 		RadioButton sortDescending = new RadioButton("Descending order");
 		sortAscending.setToggleGroup(tgSorting);
