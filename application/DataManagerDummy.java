@@ -2,46 +2,57 @@ package application;
 
 import java.util.List;
 
-public class DataManagerDummy{
+public class DataManagerDummy {
 
-  public List<Integer> getMonthlyAverage(String month, String year){
-	  return null;
-  };
-  
-  public List<Integer> getMonthlyMin(String month, String year) {
-	return null;
-}
-  
-  public List<Integer> getMonthlyMax(String month, String year) {
-	return null;
-}
-  
-  public List<Integer> getMonthlyAverageForFarm(String farmName, String year) {
-	return null;
-}
-  
-  public List<Integer> getMonthlyMinForFarm(String farmName, String year) {
-	return null;
-}
-  
-  public List<Integer> getMonthlyMaxForFarm(String farmName, String year) {
-	return null;
-}
-  
-  public List<Integer> getDataSortedByField() {
-	return null;
-}
-  
-  public List<Integer> getAverageInDateRange(int startDate, int endDate) {
-	return null;
-}
-  
-  public List<Integer> getMinInDateRange(int startDate, int endDate) {
-	return null;
-}
-  
-  public List<Integer> getMaxInDateRange(int startDate, int endDate) {
-	return null;
-}
-  
+	//get monthlyaverage returns a list of information on daily average 
+	//by month of each farm in that month
+	public List<Integer> getMonthlyAverage(String month, String year) {
+		return null;
+	};
+	//get monthlymin returns a list of information on min daily milk weight
+	//in that month for each farm
+	public List<Integer> getMonthlyMin(String month, String year) {
+		return null;
+	}
+
+	public List<Integer> getMonthlyMax(String month, String year) {
+		return null;
+	}
+
+	public List<Integer> getMonthlyAverageForFarm(String farmName, String year) {
+		return null;
+	}
+
+	//get monthlymin returns a list of information on min daily milk in each month for
+	//that farm requested.
+	public List<Integer> getMonthlyMinForFarm(String farmName, String year) {
+		return null;
+	}
+
+	public List<Integer> getMonthlyMaxForFarm(String farmName, String year) {
+		return null;
+	}
+
+	public List<Integer> getDataSortedByField() {
+		return null;
+	}
+
+	public List<Integer> getAnnual(String year) {
+		return null;
+	}
+
+	//changed from average to total based on the specification
+	// sort by total milk weight over the data range
+	public List<Integer> getTotalInDateRange(String startDate, String endDate) {
+		return null;
+	}
+
+	public List<Integer> getMinInDateRange(String startDate, String endDate) {
+		return null;
+	}
+
+	public List<Integer> getMaxInDateRange(String startDate, String endDate) {
+		return null;
+	}
+
 }

@@ -93,11 +93,11 @@ public class GUI extends BorderPane{
 		reportLabel.setFont(new Font(16));
 		message.setFont(textFont);
 		
-		TextField tf1 = new TextField();
-		TextField tf2 = new TextField();
-		TextField tf3 = new TextField();
-		TextField tf4 = new TextField();
-		TextField tf5 = new TextField();
+		TextField tf1 = new TextField();//farm ID
+		TextField tf2 = new TextField();// month
+		TextField tf3 = new TextField();// year
+		TextField tf4 = new TextField();// start date
+		TextField tf5 = new TextField();// end date
 		TextField fileName = new TextField();
 		message.setEditable(false);
 		message.setPrefSize(10, 300);// need to resize
@@ -125,12 +125,58 @@ public class GUI extends BorderPane{
 			};
 		});
 		//request corresponding report.//////////////////////////////////////////////////////
+		//note!!!!!!!!!!need to throw exceptions for incorrect text input
 		submitBtn.setOnAction(e ->{
 			if (reportCbox.getValue() == null) {
 				message.appendText("\nPlease select the report type first.");
 			}
-			else if(reportCbox.getValue().equals(options.get(0))){
-				dManager.getMonthlyMaxForFarm()
+			else if(reportCbox.getValue().equals(options.get(4))){
+				if (tf2.getText().length() != 0 && tf3.getText().length() != 0)
+					dManager.getMonthlyMax(tf2.getText(), tf3.getText());
+				else
+					message.appendText("\nPlease fill Year and Month fields");
+			}
+			else if(reportCbox.getValue().equals(options.get(5))) {
+				if (tf2.getText().length() != 0 && tf3.getText().length() != 0)
+					dManager.getMonthlyAverage(tf2.getText(), tf3.getText());
+				else
+					message.appendText("\nPlease fill Year and Month fields");
+			}
+			else if(reportCbox.getValue().equals(options.get(6))) {
+				if (tf2.getText().length() != 0 && tf3.getText().length() != 0)
+					dManager.getMonthlyMin(tf2.getText(), tf3.getText());
+				else
+					message.appendText("\nPlease fill Year and Month fields");
+			}
+			else if(reportCbox.getValue().equals(options.get(3))) {
+				if (tf3.getText().length() != 0)
+					dManager.getAnnual(tf3.getText());
+				else
+					message.appendText("\nPlease fill Year field");
+			}
+			else if(reportCbox.getValue().equals(options.get(0))) {
+				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0)
+					dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText());
+				else
+					message.appendText("\nPlease fill Farm ID and Year fields");
+			}
+			else if(reportCbox.getValue().equals(options.get(1))) {
+				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0)
+					dManager.getMonthlyAverageForFarm(tf1.getText(), tf3.getText());
+				else
+					message.appendText("\nPlease fill Farm ID and Year fields");
+			}
+			else if(reportCbox.getValue().equals(options.get(2))) {
+				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0)
+					dManager.getMonthlyMinForFarm(tf1.getText(), tf3.getText());
+				else
+					message.appendText("\nPlease fill Farm ID and Year fields");
+			}
+			else if(reportCbox.getValue().equals(options.get(7))) {
+				if(tf4.getText().length() != 0 && tf5.getText().length() != 0)
+					dManager.getTotalInDateRange(tf4.getText(), tf5.getText());
+				else
+					message.appendText("\nPlease fill start and end date fields");
 			}
 		});
 
