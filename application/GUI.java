@@ -35,14 +35,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GUI extends BorderPane {
-	static final String APP_TITLE = "Milk Weight Analyzer";
 	FileManagerDummy fManager = new FileManagerDummy();
 	DataManagerDummy dManager = new DataManagerDummy();
 
 	Font textFont = new Font("Ariel", 18);
 
 	// Add Title
-	Label title = new Label(APP_TITLE);
 
 	// initialization for essential elements
 
@@ -90,19 +88,7 @@ public class GUI extends BorderPane {
 		}
 	}
 
-//  public class DS {
-//    List<String> farmNames;
-//    List<Integer> farmWeight;
-//    DS(){
-//    List<String> farmNames = Arrays.asList("Farm 01", "Farm 02", "Farm 03");
-//    List<Integer> farmWeight = Arrays.asList(1,1,1);
-//    }
-//  }
-
 	GUI() {
-    title.setFont(new Font("Ariel", 32));
-    title.setAlignment(Pos.CENTER);
-
     farmID.setFont(textFont);
     month.setFont(textFont);
     year.setFont(textFont);
@@ -147,7 +133,6 @@ public class GUI extends BorderPane {
     // note!!!!!!!!!!need to throw exceptions for incorrect text input
     submitBtn.setOnAction(e -> {
       displayTable(reportCbox, options);
-   
     });
 
     // hbox to add load/save bottons
@@ -181,7 +166,7 @@ public class GUI extends BorderPane {
     outer_vbox.setPadding(new Insets(20, 10, 0, 0));
     outer_vbox.getChildren().addAll(hbox, message);
 
-    this.setLeft(outer_vbox);
+    this.setCenter(outer_vbox);
 
     // create items for table view
 
@@ -210,7 +195,7 @@ public class GUI extends BorderPane {
     vbox.getChildren().clear();
     vbox.getChildren().addAll(tableTitle, hboxTable, sortAscending, sortDescending, table);
 
-    this.setRight(vbox);
+//    this.setRight(vbox);
     this.setPadding(new Insets(0, 100, 0, 0));
   }
     
@@ -321,16 +306,6 @@ public class GUI extends BorderPane {
         nameReport(dManager.getMonthlyMin(tf2.getText(), tf3.getText()), table);
       else
         message.appendText("\nPlease fill Year and Month fields");
-    } else if (reportCbox.getValue().equals(options.get(7))) {
-      if (tf4.getText().length() != 0 && tf5.getText().length() != 0)
-        nameReport(dManager.getMaxInDateRange(tf4.getText(), tf5.getText()), table);
-      else
-        message.appendText("\nPlease fill start and end date fields");
-    } else if (reportCbox.getValue().equals(options.get(8))) {
-      if (tf4.getText().length() != 0 && tf5.getText().length() != 0)
-        nameReport(dManager.getMinInDateRange(tf4.getText(), tf5.getText()), table);
-      else
-        message.appendText("\nPlease fill start and end date fields");
     } else if (reportCbox.getValue().equals(options.get(9))) {
       if (tf4.getText().length() != 0 && tf5.getText().length() != 0)
         nameReport(dManager.getTotalInDateRange(tf4.getText(), tf5.getText()), table);

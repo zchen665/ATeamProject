@@ -62,7 +62,7 @@ public class Main extends Application {
 		BorderPane root = new BorderPane();
 
 		// Create Scene
-		GUI gui = new GUI();
+		GUI2 gui = new GUI2();
 		Scene mainScene = new Scene(gui, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		// Add the stuff and set the primary stage

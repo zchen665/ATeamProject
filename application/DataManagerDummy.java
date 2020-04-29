@@ -22,10 +22,18 @@ public class DataManagerDummy {
 		return ds;
 	}
 
+	public DS getMonthlyReport(String moth, String year) {
+		return ds;
+	}
+	
+	public List<Double> getFarmReport(String farmName, String year){
+		return list;
+	}
+	
 	public List<Double> getMonthlyAverageForFarm(String farmName, String year) {
 		return list;
 	}
-
+	
 	//get monthlymin returns a list of information on min daily milk in each month for
 	//that farm requested.
 	public List<Double> getMonthlyMinForFarm(String farmName, String year) {
@@ -40,21 +48,13 @@ public class DataManagerDummy {
 		return null;
 	}
 
-	public List<Double> getAnnual(String year) {
-		return list;
+	public DS getAnnual(String year) {
+		return ds;
 	}
 
 	//changed from average to total based on the specification
 	// sort by total milk weight over the data range
 	public DS getTotalInDateRange(String startDate, String endDate) {
-		return ds;
-	}
-
-	public DS getMinInDateRange(String startDate, String endDate) {
-		return ds;
-	}
-
-	public DS getMaxInDateRange(String startDate, String endDate) {
 		return ds;
 	}
 }
