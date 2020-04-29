@@ -48,8 +48,8 @@ public class DataManagerDummy {
 		return null;
 	}
 
-	public DS getAnnual(String year) {
-		return ds;
+	public List<Double> getAnnual(String year) {
+		return list;
 	}
 
 	//changed from average to total based on the specification

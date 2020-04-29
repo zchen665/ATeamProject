@@ -32,7 +32,7 @@ public class FileManagerDummy {
    * @param folder
    * @return
    */
-  private List<File> enlistAllFiles(File folder) {
+  public List<File> enlistAllFiles(File folder) {
     return null;
   }
 

@@ -1,4 +1,4 @@
-/**
+package application; /**
  * A data structure that can store the farm and milk information as needed
  */
 
