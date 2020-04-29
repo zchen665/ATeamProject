@@ -35,218 +35,219 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GUI extends BorderPane {
-	static final String APP_TITLE = "Milk Weight Analyzer";
-	FileManagerDummy fManager = new FileManagerDummy();
-	DataManagerDummy dManager = new DataManagerDummy();
+  static final String APP_TITLE = "Milk Weight Analyzer";
+  FileManagerDummy fManager = new FileManagerDummy();
+  DataManagerDummy dManager = new DataManagerDummy();
 
-	Font textFont = new Font("Ariel", 18);
+  Font textFont = new Font("Ariel", 18);
 
-	// Add Title
-	Label title = new Label(APP_TITLE);
+  // Add Title
+  Label title = new Label(APP_TITLE);
 
-	// initialization for essential elements
+  // initialization for essential elements
 
-	Label farmID = new Label("Farm ID: ");
-	Label month = new Label("Month: ");
-	Label year = new Label("Year: ");
-	Label date1 = new Label("Start Date: ");
-	Label date2 = new Label("End Date: ");
-	Label sortedLabel = new Label("Sorted by: ");
-	Label file = new Label("File Name: ");
-	Label reportLabel = new Label("Choose report Type: ");
-	TextArea message = new TextArea(
-			"DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n" + "Monthly report: Fill year and month\n"
-					+ "Annual report: Fill year\n" + "Date range report: Fill both start and end dates.\n"
-					+ "min max, and average for monthly and farm report will be listed here.");
+  Label farmID = new Label("Farm ID: ");
+  Label month = new Label("Month: ");
+  Label year = new Label("Year: ");
+  Label date1 = new Label("Start Date: ");
+  Label date2 = new Label("End Date: ");
+  Label sortedLabel = new Label("Sorted by: ");
+  Label file = new Label("File Name: ");
+  Label reportLabel = new Label("Choose report Type: ");
+  TextArea message = new TextArea("DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n"
+    + "Monthly report: Fill year and month\n" + "Annual report: Fill year\n"
+    + "Date range report: Fill both start and end dates.\n"
+    + "min max, and average for monthly and farm report will be listed here.");
 
-	TextField tf1 = new TextField();// farm ID
-	TextField tf2 = new TextField();// month
-	TextField tf3 = new TextField();// year
-	TextField tf4 = new TextField();// start date
-	TextField tf5 = new TextField();// end date
-	TextField fileName = new TextField();
-	
-	public class Row {
-		private String column1;
-		private String column2;
-		private String column3;
+  TextField tf1 = new TextField();// farm ID
+  TextField tf2 = new TextField();// month
+  TextField tf3 = new TextField();// year
+  TextField tf4 = new TextField();// start date
+  TextField tf5 = new TextField();// end date
+  TextField fileName = new TextField();
 
-		public Row(String column1, String column2, String column3) {
-			this.column1 = column1;
-			this.column2 = column2;
-			this.column3 = column3;
-		}
 
-		public String getColumn1() {
-			return column1;
-		}
+  GUI() {
+    title.setFont(new Font("Ariel", 32));
+    title.setAlignment(Pos.CENTER);
 
-		public String getColumn2() {
-			return column2;
-		}
+    farmID.setFont(textFont);
+    month.setFont(textFont);
+    year.setFont(textFont);
+    date1.setFont(textFont);
+    date2.setFont(textFont);
+    sortedLabel.setFont(textFont);
+    file.setFont(textFont);
+    reportLabel.setFont(new Font(16));
+    message.setFont(textFont);
+    message.setEditable(false);
+    message.setPrefSize(10, 300);// need to resize
 
-		public String getColumn3() {
-			return column3;
-		}
-	}
+    TableView table = new TableView();
+    Label tableTitle = new Label("Report");
 
-	GUI() {
-		title.setFont(new Font("Ariel", 32));
-		title.setAlignment(Pos.CENTER);
-		
-		farmID.setFont(textFont);
-		month.setFont(textFont);
-		year.setFont(textFont);
-		date1.setFont(textFont);
-		date2.setFont(textFont);
-		sortedLabel.setFont(textFont);
-		file.setFont(textFont);
-		reportLabel.setFont(new Font(16));
-		message.setFont(textFont);
-		message.setEditable(false);
-		message.setPrefSize(10, 300);// need to resize
+    // combo box for type of report needed
+    ObservableList<String> options = FXCollections
+      .observableArrayList("Farm Report(max)", "Farm Report(average)", "Farm Report(min)",
+        "Annual Report", "Monthly Report(max)", "Monthly Report(average)", "Monthly Report(min)",
+        "Date Range Report");
+    ComboBox reportCbox = new ComboBox(options);
 
-		TableView table = new TableView();
-		Label tableTitle = new Label("Report");
+    // button to submit info entered
+    Button submitBtn = new Button("sumbit all");
+    Button loadFile = new Button("load");
+    Button saveFile = new Button("save");
 
-		// combo box for type of report needed
-		ObservableList<String> options = FXCollections.observableArrayList("Farm Report(max)", "Farm Report(average)",
-				"Farm Report(min)", "Annual Report", "Monthly Report(max)", "Monthly Report(average)",
-				"Monthly Report(min)", "Date Range Report");
-		ComboBox reportCbox = new ComboBox(options);
-
-		// button to submit info entered
-		Button submitBtn = new Button("sumbit all");
-		Button loadFile = new Button("load");
-		Button saveFile = new Button("save");
-
-		loadFile.setOnAction(e -> {
-			if (fManager.readFile(fileName.getText())) {
-				message.appendText("\nFile loaded");
-			}
-			;
+    loadFile.setOnAction(e -> {
+      if (fManager.readFile(fileName.getText())) {
+        message.appendText("\nFile loaded");
+      }
 		});
-		saveFile.setOnAction(e -> {
-			if (fManager.writeToFile(fileName.getText())) {
-				message.appendText("\nFile saved");
-			}
-			;
+    saveFile.setOnAction(e -> {
+      if (fManager.writeToFile(fileName.getText())) {
+        message.appendText("\nFile saved");
+      }
 		});
-		// request corresponding
-		// report.//////////////////////////////////////////////////////
-		// note!!!!!!!!!!need to throw exceptions for incorrect text input
-		submitBtn.setOnAction(e -> {
-			displayTable();
-//			table.getItems().clear();
-//			monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
-		});
+    // request corresponding
+    // report.//////////////////////////////////////////////////////
+    // note!!!!!!!!!!need to throw exceptions for incorrect text input
+    submitBtn.setOnAction(e -> {
+      displayTable();
+      //			table.getItems().clear();
+      //			monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
+    });
 
-		// hbox to add load/save bottons
-		HBox hboxBtn = new HBox();
-		hboxBtn.getChildren().addAll(loadFile, saveFile);
+    // hbox to add load/save bottons
+    HBox hboxBtn = new HBox();
+    hboxBtn.getChildren().addAll(loadFile, saveFile);
 
-		// vbox for textField labels
-		VBox vbox1 = new VBox();
-		vbox1.getChildren().addAll(file, farmID, month, year, date1, date2);
+    // vbox for textField labels
+    VBox vbox1 = new VBox();
+    vbox1.getChildren().addAll(file, farmID, month, year, date1, date2);
 
-		// vbox for textField
-		VBox vbox2 = new VBox();
-		vbox2.setSpacing(2);
-		vbox2.getChildren().addAll(fileName, tf1, tf2, tf3, tf4, tf5);
+    // vbox for textField
+    VBox vbox2 = new VBox();
+    vbox2.setSpacing(2);
+    vbox2.getChildren().addAll(fileName, tf1, tf2, tf3, tf4, tf5);
 
-		// vbox for choosing report type and sumbit button
-		VBox vbox3 = new VBox();
-		vbox3.setSpacing(2);
-		vbox3.getChildren().addAll(hboxBtn, reportLabel, reportCbox, submitBtn);
-//            vbox3.setPadding(new Insets(53,10,0,0));
+    // vbox for choosing report type and sumbit button
+    VBox vbox3 = new VBox();
+    vbox3.setSpacing(2);
+    vbox3.getChildren().addAll(hboxBtn, reportLabel, reportCbox, submitBtn);
+    //            vbox3.setPadding(new Insets(53,10,0,0));
 
-		// hbox to manage layout
-		HBox hbox = new HBox();
-		hbox.setPadding(new Insets(15, 12, 15, 12));
-		hbox.setSpacing(30);
-		hbox.getChildren().addAll(vbox1, vbox2, vbox3);
+    // hbox to manage layout
+    HBox hbox = new HBox();
+    hbox.setPadding(new Insets(15, 12, 15, 12));
+    hbox.setSpacing(30);
+    hbox.getChildren().addAll(vbox1, vbox2, vbox3);
 
-		// vbox for text fields
-		VBox outer_vbox = new VBox();
-		outer_vbox.setSpacing(40);
-		outer_vbox.setPadding(new Insets(20, 10, 0, 0));
-		outer_vbox.getChildren().addAll(hbox, message);
+    // vbox for text fields
+    VBox outer_vbox = new VBox();
+    outer_vbox.setSpacing(40);
+    outer_vbox.setPadding(new Insets(20, 10, 0, 0));
+    outer_vbox.getChildren().addAll(hbox, message);
 
-		this.setLeft(outer_vbox);
+    this.setLeft(outer_vbox);
 
-		// create items for table view
+    // create items for table view
 
-		// hboxTable for sorting options
-		HBox hboxTable = new HBox();
-		ObservableList<String> sortingOptions = FXCollections.observableArrayList("default", "weight", "percentage",
-				"farm ID");
-		ComboBox sortingcbox = new ComboBox(sortingOptions);
-		sortingcbox.getSelectionModel().select(0);
-		VBox vbox = new VBox();
-		hboxTable.getChildren().addAll(sortedLabel, sortingcbox);
-		hboxTable.setSpacing(10);
+    // hboxTable for sorting options
+    HBox hboxTable = new HBox();
+    ObservableList<String> sortingOptions =
+      FXCollections.observableArrayList("default", "weight", "percentage", "farm ID");
+    ComboBox sortingcbox = new ComboBox(sortingOptions);
+    sortingcbox.getSelectionModel().select(0);
+    VBox vbox = new VBox();
+    hboxTable.getChildren().addAll(sortedLabel, sortingcbox);
+    hboxTable.setSpacing(10);
 
-		ToggleGroup tgSorting = new ToggleGroup();
+    ToggleGroup tgSorting = new ToggleGroup();
 
-		RadioButton sortAscending = new RadioButton("Ascending order");
-		RadioButton sortDescending = new RadioButton("Descending order");
-		sortAscending.setToggleGroup(tgSorting);
-		sortDescending.setToggleGroup(tgSorting);
-		sortAscending.setSelected(true);
+    RadioButton sortAscending = new RadioButton("Ascending order");
+    RadioButton sortDescending = new RadioButton("Descending order");
+    sortAscending.setToggleGroup(tgSorting);
+    sortDescending.setToggleGroup(tgSorting);
+    sortAscending.setSelected(true);
 
-		vbox.setSpacing(5);
-		vbox.setPadding(new Insets(10, 0, 0, 10));
-		vbox.getChildren().clear();
-		vbox.getChildren().addAll(tableTitle, hboxTable, sortAscending, sortDescending, table);
+    vbox.setSpacing(5);
+    vbox.setPadding(new Insets(10, 0, 0, 10));
+    vbox.getChildren().clear();
+    vbox.getChildren().addAll(tableTitle, hboxTable, sortAscending, sortDescending, table);
 
-		this.setRight(vbox);
-		this.setPadding(new Insets(0, 100, 0, 0));
-	}
+    this.setRight(vbox);
+    this.setPadding(new Insets(0, 100, 0, 0));
+  }
 
-	public void monthlyReport(List<Integer> list, Font textFont, TableView table) {
-		TableColumn farm = new TableColumn("Month");
-		farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
-		TableColumn weight = new TableColumn("Total Weight");
-		weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
-		TableColumn percentage = new TableColumn("Percentage");
-		percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
+  public void monthlyReport(List<Integer> list, Font textFont, TableView table) {
+    TableColumn farm = new TableColumn("Month");
+    farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
+    TableColumn weight = new TableColumn("Total Weight");
+    weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
+    TableColumn percentage = new TableColumn("Percentage");
+    percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
 
-		table.getColumns().addAll(farm, weight, percentage);
+    table.getColumns().addAll(farm, weight, percentage);
 
-		int sum = 0;
-		for (int i = 0; i < list.size(); i++) {
-			sum = sum + list.get(i);
-		}
-		int month = 1;
-		int monthlyWeight = 0;
-		double monthlyPercentage = 0;
-		for (int j = 0; j < list.size(); j++) {
-			String row = "row";
-			monthlyWeight = list.get(j);
-			monthlyPercentage = (double) monthlyWeight / (double) sum;
-			row = row.concat(Integer.toString(j));
-			Row rows = new Row(Integer.toString(month), Integer.toString(monthlyWeight),
-					Double.toString(monthlyPercentage));
-			table.getItems().add(rows);
-			month++;
-		}
-	}
+    int sum = 0;
+    for (int i = 0; i < list.size(); i++) {
+      sum = sum + list.get(i);
+    }
+    int month = 1;
+    int monthlyWeight = 0;
+    double monthlyPercentage = 0;
+    for (int j = 0; j < list.size(); j++) {
+      String row = "row";
+      monthlyWeight = list.get(j);
+      monthlyPercentage = (double) monthlyWeight / (double) sum;
+      row = row.concat(Integer.toString(j));
+      Row rows = new Row(Integer.toString(month), Integer.toString(monthlyWeight),
+        Double.toString(monthlyPercentage));
+      table.getItems().add(rows);
+      month++;
+    }
+  }
 
-	public void displayTable() {
-		Stage pop = new Stage();
-		pop.initModality(Modality.APPLICATION_MODAL);
-		pop.setTitle("Report");
-		Button closeBtn = new Button("Close");
-		closeBtn.setOnAction(e -> pop.close());
+  public void displayTable() {
+    Stage pop = new Stage();
+    pop.initModality(Modality.APPLICATION_MODAL);
+    pop.setTitle("Report");
+    Button closeBtn = new Button("Close");
+    closeBtn.setOnAction(e -> pop.close());
 
-		TableView table = new TableView();
-		monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
+    TableView table = new TableView();
+    monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
 
-		BorderPane root = new BorderPane();
-		root.setLeft(table);
-		Scene popup = new Scene(root, 500, 300);
-		pop.setScene(popup);
-		pop.showAndWait();
-	}
+    BorderPane root = new BorderPane();
+    root.setLeft(table);
+    Scene popup = new Scene(root, 500, 300);
+    pop.setScene(popup);
+    pop.showAndWait();
+  }
+
+
+  public class Row {
+    private final String column1;
+    private final String column2;
+    private final String column3;
+
+    public Row(String column1, String column2, String column3) {
+      this.column1 = column1;
+      this.column2 = column2;
+      this.column3 = column3;
+    }
+
+    public String getColumn1() {
+      return column1;
+    }
+
+    public String getColumn2() {
+      return column2;
+    }
+
+    public String getColumn3() {
+      return column3;
+    }
+  }
 
 }
