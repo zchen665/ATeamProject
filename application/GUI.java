@@ -55,9 +55,15 @@ public class GUI extends BorderPane {
   Label file = new Label("File Name: ");
   Label reportLabel = new Label("Choose report Type: ");
   TextArea message = new TextArea("DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n"
+<<<<<<< HEAD
       + "Monthly report: Fill year and month\n" + "Annual report: Fill year\n"
       + "Date range report: Fill both start and end dates.\n"
       + "min max, and average for monthly and farm report will be listed here.");
+=======
+    + "Monthly report: Fill year and month\n" + "Annual report: Fill year\n"
+    + "Date range report: Fill both start and end dates.\n"
+    + "min max, and average for monthly and farm report will be listed here.");
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
 
   TextField tf1 = new TextField();// farm ID
   TextField tf2 = new TextField();// month
@@ -66,6 +72,7 @@ public class GUI extends BorderPane {
   TextField tf5 = new TextField();// end date
   TextField fileName = new TextField();
 
+<<<<<<< HEAD
   public class Row {
     private String column1;
     private String column2;
@@ -98,6 +105,8 @@ public class GUI extends BorderPane {
     List<Integer> farmWeight = Arrays.asList(1,1,1);
     }
   }
+=======
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
 
   GUI() {
     title.setFont(new Font("Ariel", 32));
@@ -119,10 +128,17 @@ public class GUI extends BorderPane {
     Label tableTitle = new Label("Report");
 
     // combo box for type of report needed
+<<<<<<< HEAD
     ObservableList<String> options = FXCollections.observableArrayList("Farm Report(max)",
         "Farm Report(average)", "Farm Report(min)", "Annual Report", "Monthly Report(max)",
         "Monthly Report(average)", "Monthly Report(min)", "Date Range (Max) Report",
         "Date Range (Min) Report", "Date Range (Average) Report");
+=======
+    ObservableList<String> options = FXCollections
+      .observableArrayList("Farm Report(max)", "Farm Report(average)", "Farm Report(min)",
+        "Annual Report", "Monthly Report(max)", "Monthly Report(average)", "Monthly Report(min)",
+        "Date Range Report");
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     ComboBox reportCbox = new ComboBox(options);
 
     // button to submit info entered
@@ -133,6 +149,7 @@ public class GUI extends BorderPane {
     loadFile.setOnAction(e -> {
       if (fManager.readFile(fileName.getText())) {
         message.appendText("\nFile loaded");
+<<<<<<< HEAD
       } ;
     });
     saveFile.setOnAction(e -> {
@@ -140,14 +157,29 @@ public class GUI extends BorderPane {
         message.appendText("\nFile saved");
       } ;
     });
+=======
+      }
+		});
+    saveFile.setOnAction(e -> {
+      if (fManager.writeToFile(fileName.getText())) {
+        message.appendText("\nFile saved");
+      }
+		});
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     // request corresponding
     // report.//////////////////////////////////////////////////////
     // note!!!!!!!!!!need to throw exceptions for incorrect text input
     submitBtn.setOnAction(e -> {
+<<<<<<< HEAD
       displayTable(reportCbox, options);
       // table.getItems().clear();
       // monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont,
       // table);
+=======
+      displayTable();
+      //			table.getItems().clear();
+      //			monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     });
 
     // hbox to add load/save bottons
@@ -167,7 +199,11 @@ public class GUI extends BorderPane {
     VBox vbox3 = new VBox();
     vbox3.setSpacing(2);
     vbox3.getChildren().addAll(hboxBtn, reportLabel, reportCbox, submitBtn);
+<<<<<<< HEAD
     // vbox3.setPadding(new Insets(53,10,0,0));
+=======
+    //            vbox3.setPadding(new Insets(53,10,0,0));
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
 
     // hbox to manage layout
     HBox hbox = new HBox();
@@ -188,7 +224,11 @@ public class GUI extends BorderPane {
     // hboxTable for sorting options
     HBox hboxTable = new HBox();
     ObservableList<String> sortingOptions =
+<<<<<<< HEAD
         FXCollections.observableArrayList("default", "weight", "percentage", "farm ID");
+=======
+      FXCollections.observableArrayList("default", "weight", "percentage", "farm ID");
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     ComboBox sortingcbox = new ComboBox(sortingOptions);
     sortingcbox.getSelectionModel().select(0);
     VBox vbox = new VBox();
@@ -212,9 +252,13 @@ public class GUI extends BorderPane {
     this.setPadding(new Insets(0, 100, 0, 0));
   }
 
+<<<<<<< HEAD
   public void monthlyReport(List<Double> list, TableView table) {
     table.refresh();
     table.getItems().clear();
+=======
+  public void monthlyReport(List<Integer> list, Font textFont, TableView table) {
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     TableColumn farm = new TableColumn("Month");
     farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
     TableColumn weight = new TableColumn("Total Weight");
@@ -224,25 +268,39 @@ public class GUI extends BorderPane {
 
     table.getColumns().addAll(farm, weight, percentage);
 
+<<<<<<< HEAD
     double sum = 0;
+=======
+    int sum = 0;
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     for (int i = 0; i < list.size(); i++) {
       sum = sum + list.get(i);
     }
     int month = 1;
+<<<<<<< HEAD
     double monthlyWeight = 0;
+=======
+    int monthlyWeight = 0;
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     double monthlyPercentage = 0;
     for (int j = 0; j < list.size(); j++) {
       String row = "row";
       monthlyWeight = list.get(j);
       monthlyPercentage = (double) monthlyWeight / (double) sum;
       row = row.concat(Integer.toString(j));
+<<<<<<< HEAD
       Row rows = new Row(Integer.toString(month), Double.toString(monthlyWeight),
           Double.toString(monthlyPercentage));
+=======
+      Row rows = new Row(Integer.toString(month), Integer.toString(monthlyWeight),
+        Double.toString(monthlyPercentage));
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
       table.getItems().add(rows);
       month++;
     }
   }
 
+<<<<<<< HEAD
   public void nameReport(application.DS ds, TableView table) {
     table.refresh();
     table.getItems().clear();
@@ -271,6 +329,9 @@ public class GUI extends BorderPane {
   }
 
   public void displayTable(ComboBox reportCbox, ObservableList<String> options) {
+=======
+  public void displayTable() {
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     Stage pop = new Stage();
     pop.initModality(Modality.APPLICATION_MODAL);
     pop.setTitle("Report");
@@ -278,6 +339,7 @@ public class GUI extends BorderPane {
     closeBtn.setOnAction(e -> pop.close());
 
     TableView table = new TableView();
+<<<<<<< HEAD
 
     if (reportCbox.getValue() == null) {
       message.appendText("\nPlease select the report type first.");
@@ -336,9 +398,43 @@ public class GUI extends BorderPane {
 
     BorderPane root = new BorderPane();
     root.setCenter(table);
+=======
+    monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
+
+    BorderPane root = new BorderPane();
+    root.setLeft(table);
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
     Scene popup = new Scene(root, 500, 300);
     pop.setScene(popup);
     pop.showAndWait();
   }
+<<<<<<< HEAD
+=======
+
+
+  public class Row {
+    private final String column1;
+    private final String column2;
+    private final String column3;
+
+    public Row(String column1, String column2, String column3) {
+      this.column1 = column1;
+      this.column2 = column2;
+      this.column3 = column3;
+    }
+
+    public String getColumn1() {
+      return column1;
+    }
+
+    public String getColumn2() {
+      return column2;
+    }
+
+    public String getColumn3() {
+      return column3;
+    }
+  }
+>>>>>>> d15ccef70687b7fd831082af0e0139a41f8332ab
 
 }

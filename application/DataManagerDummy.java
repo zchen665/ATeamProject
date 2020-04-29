@@ -57,5 +57,4 @@ public class DataManagerDummy {
 	public DS getMaxInDateRange(String startDate, String endDate) {
 		return ds;
 	}
-
 }
