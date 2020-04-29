@@ -338,7 +338,6 @@ public class GUI2 extends BorderPane {
 	public void displayTable(String param1, String param2, String option) {
 		Stage pop = new Stage();
 		pop.initModality(Modality.APPLICATION_MODAL);
-		pop.setTitle("Report");
 		Button closeBtn = new Button("Close");
 		closeBtn.setOnAction(e -> pop.close());
 
@@ -346,16 +345,22 @@ public class GUI2 extends BorderPane {
 
 		if (option.equals("Farm Report")) {
 			month_weight_percentReport(dManager.getFarmReport(param1, param2), table);
+			pop.setTitle("Farm Report");
 		} else if (option.equals("Farm Report(detailed)")) {
 			month_min_ave_maxReport(param1, param2, table);
+			pop.setTitle("Farm Report(detailed)");
 		} else if (option.equals("Monthly Report")) {
 			id_weight_percentReport(dManager.getMonthlyReport(param1, param2), table);
+			pop.setTitle("Monthly Report");
 		} else if (option.equals("Monthly Report(detailed)")) {
 			id_min_ave_maxReport(param1, param2, table);
+			pop.setTitle("Monthly Report(detailed)");
 		} else if (option.equals("Annual Report")) {
 			id_weight_percentReport(dManager.getAnnual(param2), table);
+			pop.setTitle("Annual Report");
 		} else if (option.equals("Date Range Report")) {
 			id_weight_percentReport(dManager.getTotalInDateRange(param1, param2), table);
+			pop.setTitle("Date Range Report");
 		} else {
 			message.appendText("Unknown report type requested when dispay");
 		}
