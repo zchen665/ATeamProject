@@ -3,7 +3,6 @@ package application;
 import java.io.FileInputStream;
 import java.util.List;
 
-import application.Main.Row;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,12 +31,40 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class GUI extends BorderPane{
+public class GUI extends BorderPane {
 	static final String APP_TITLE = "Milk Weight Analyzer";
 	FileManagerDummy fManager = new FileManagerDummy();
 	DataManagerDummy dManager = new DataManagerDummy();
+
+	Font textFont = new Font("Ariel", 18);
+
+	// Add Title
+	Label title = new Label(APP_TITLE);
+
+	// initialization for essential elements
+
+	Label farmID = new Label("Farm ID: ");
+	Label month = new Label("Month: ");
+	Label year = new Label("Year: ");
+	Label date1 = new Label("Start Date: ");
+	Label date2 = new Label("End Date: ");
+	Label sortedLabel = new Label("Sorted by: ");
+	Label file = new Label("File Name: ");
+	Label reportLabel = new Label("Choose report Type: ");
+	TextArea message = new TextArea(
+			"DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n" + "Monthly report: Fill year and month\n"
+					+ "Annual report: Fill year\n" + "Date range report: Fill both start and end dates.\n"
+					+ "min max, and average for monthly and farm report will be listed here.");
+
+	TextField tf1 = new TextField();// farm ID
+	TextField tf2 = new TextField();// month
+	TextField tf3 = new TextField();// year
+	TextField tf4 = new TextField();// start date
+	TextField tf5 = new TextField();// end date
+	TextField fileName = new TextField();
 	
 	public class Row {
 		private String column1;
@@ -62,28 +89,11 @@ public class GUI extends BorderPane{
 			return column3;
 		}
 	}
-	GUI(){
-		Font textFont = new Font("Ariel", 18);
 
-		// Add Title
-		Label title = new Label(APP_TITLE);
+	GUI() {
 		title.setFont(new Font("Ariel", 32));
 		title.setAlignment(Pos.CENTER);
-
-		// initialization for essential elements
-
-		Label farmID = new Label("Farm ID: ");
-		Label month = new Label("Month: ");
-		Label year = new Label("Year: ");
-		Label date1 = new Label("Start Date: ");
-		Label date2 = new Label("End Date: ");
-		Label sortedLabel = new Label("Sorted by: ");
-		Label file = new Label("File Name: ");
-		Label reportLabel = new Label("Choose report Type: ");
-		TextArea message = new TextArea(
-				"DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n" + "Monthly report: Fill year and month\n"
-						+ "Annual report: Fill year\n" + "Date range report: Fill both start and end dates.\n"
-						+ "min max, and average for monthly and farm report will be listed here.");
+		
 		farmID.setFont(textFont);
 		month.setFont(textFont);
 		year.setFont(textFont);
@@ -93,100 +103,42 @@ public class GUI extends BorderPane{
 		file.setFont(textFont);
 		reportLabel.setFont(new Font(16));
 		message.setFont(textFont);
-		
-		TextField tf1 = new TextField();//farm ID
-		TextField tf2 = new TextField();// month
-		TextField tf3 = new TextField();// year
-		TextField tf4 = new TextField();// start date
-		TextField tf5 = new TextField();// end date
-		TextField fileName = new TextField();
 		message.setEditable(false);
 		message.setPrefSize(10, 300);// need to resize
-		
+
 		TableView table = new TableView();
 		Label tableTitle = new Label("Report");
 
 		// combo box for type of report needed
-		ObservableList<String> options = FXCollections.observableArrayList("Farm Report(max)", "Farm Report(average)", 
+		ObservableList<String> options = FXCollections.observableArrayList("Farm Report(max)", "Farm Report(average)",
 				"Farm Report(min)", "Annual Report", "Monthly Report(max)", "Monthly Report(average)",
 				"Monthly Report(min)", "Date Range Report");
 		ComboBox reportCbox = new ComboBox(options);
-		
 
 		// button to submit info entered
 		Button submitBtn = new Button("sumbit all");
 		Button loadFile = new Button("load");
 		Button saveFile = new Button("save");
-		
+
 		loadFile.setOnAction(e -> {
-			if(fManager.readFile(fileName.getText())) {
+			if (fManager.readFile(fileName.getText())) {
 				message.appendText("\nFile loaded");
-			};
+			}
+			;
 		});
 		saveFile.setOnAction(e -> {
-			if(fManager.writeToFile(fileName.getText())) {
+			if (fManager.writeToFile(fileName.getText())) {
 				message.appendText("\nFile saved");
-			};
+			}
+			;
 		});
-		//request corresponding report.//////////////////////////////////////////////////////
-		//note!!!!!!!!!!need to throw exceptions for incorrect text input
-		submitBtn.setOnAction(e ->{
-		  
-			if (reportCbox.getValue() == null) {
-				message.appendText("\nPlease select the report type first.");
-			}
-			else if(reportCbox.getValue().equals(options.get(4))){
-				if (tf2.getText().length() != 0 && tf3.getText().length() != 0)
-					dManager.getMonthlyMax(tf2.getText(), tf3.getText());
-				else
-					message.appendText("\nPlease fill Year and Month fields");
-			}
-			else if(reportCbox.getValue().equals(options.get(5))) {
-				if (tf2.getText().length() != 0 && tf3.getText().length() != 0)
-					dManager.getMonthlyAverage(tf2.getText(), tf3.getText());
-				else
-					message.appendText("\nPlease fill Year and Month fields");
-			}
-			else if(reportCbox.getValue().equals(options.get(6))) {
-				if (tf2.getText().length() != 0 && tf3.getText().length() != 0)
-					dManager.getMonthlyMin(tf2.getText(), tf3.getText());
-				else
-					message.appendText("\nPlease fill Year and Month fields");
-			}
-			else if(reportCbox.getValue().equals(options.get(3))) {
-				if (tf3.getText().length() != 0)
-					dManager.getAnnual(tf3.getText());
-				else
-					message.appendText("\nPlease fill Year field");
-			}
-			else if(reportCbox.getValue().equals(options.get(0))) {
-				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0) {
-				  table.refresh();
-				  table.getItems().clear();
-				  table.getItems().removeAll(table.getItems());
-					monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
-				}
-				else
-					message.appendText("\nPlease fill Farm ID and Year fields");
-			}
-			else if(reportCbox.getValue().equals(options.get(1))) {
-				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0)
-					dManager.getMonthlyAverageForFarm(tf1.getText(), tf3.getText());
-				else
-					message.appendText("\nPlease fill Farm ID and Year fields");
-			}
-			else if(reportCbox.getValue().equals(options.get(2))) {
-				if (tf1.getText().length() != 0 && tf3.getText().length()!= 0)
-					dManager.getMonthlyMinForFarm(tf1.getText(), tf3.getText());
-				else
-					message.appendText("\nPlease fill Farm ID and Year fields");
-			}
-			else if(reportCbox.getValue().equals(options.get(7))) {
-				if(tf4.getText().length() != 0 && tf5.getText().length() != 0)
-					dManager.getTotalInDateRange(tf4.getText(), tf5.getText());
-				else
-					message.appendText("\nPlease fill start and end date fields");
-			}
+		// request corresponding
+		// report.//////////////////////////////////////////////////////
+		// note!!!!!!!!!!need to throw exceptions for incorrect text input
+		submitBtn.setOnAction(e -> {
+			displayTable();
+//			table.getItems().clear();
+//			monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
 		});
 
 		// hbox to add load/save bottons
@@ -223,8 +175,6 @@ public class GUI extends BorderPane{
 		this.setLeft(outer_vbox);
 
 		// create items for table view
-		                    
-		
 
 		// hboxTable for sorting options
 		HBox hboxTable = new HBox();
@@ -237,7 +187,7 @@ public class GUI extends BorderPane{
 		hboxTable.setSpacing(10);
 
 		ToggleGroup tgSorting = new ToggleGroup();
-		
+
 		RadioButton sortAscending = new RadioButton("Ascending order");
 		RadioButton sortDescending = new RadioButton("Descending order");
 		sortAscending.setToggleGroup(tgSorting);
@@ -252,39 +202,51 @@ public class GUI extends BorderPane{
 		this.setRight(vbox);
 		this.setPadding(new Insets(0, 100, 0, 0));
 	}
-	
 
-    public void monthlyReport(List<Integer> list, Font textFont, TableView table) {
-      table.refresh();
-      table.getItems().clear();
-      table.getItems().removeAll(table.getItems());
-      TableColumn farm = new TableColumn("Month");
-      farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
-      TableColumn weight = new TableColumn("Total Weight");
-      weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
-      TableColumn percentage = new TableColumn("Percentage");
-      percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
+	public void monthlyReport(List<Integer> list, Font textFont, TableView table) {
+		TableColumn farm = new TableColumn("Month");
+		farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
+		TableColumn weight = new TableColumn("Total Weight");
+		weight.setCellValueFactory(new PropertyValueFactory<>("column2"));
+		TableColumn percentage = new TableColumn("Percentage");
+		percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
 
-      table.getColumns().addAll(farm, weight, percentage);
-      
-      int sum = 0;
-      for (int i = 0; i < list.size(); i++) {
-        sum = sum + list.get(i);
-      }
-      int month = 1;
-      int monthlyWeight = 0;
-      double monthlyPercentage = 0;
-      for (int j = 0; j < list.size();j++) {
-        String row = "row";
-        monthlyWeight = list.get(j);
-        monthlyPercentage = (double)monthlyWeight/(double)sum;
-        row = row.concat(Integer.toString(j));
-        Row rows = new Row(Integer.toString(month), 
-            Integer.toString(monthlyWeight), 
-            Double.toString(monthlyPercentage));
-        table.getItems().add(rows);
-        month++;
-      }
-    }
+		table.getColumns().addAll(farm, weight, percentage);
+
+		int sum = 0;
+		for (int i = 0; i < list.size(); i++) {
+			sum = sum + list.get(i);
+		}
+		int month = 1;
+		int monthlyWeight = 0;
+		double monthlyPercentage = 0;
+		for (int j = 0; j < list.size(); j++) {
+			String row = "row";
+			monthlyWeight = list.get(j);
+			monthlyPercentage = (double) monthlyWeight / (double) sum;
+			row = row.concat(Integer.toString(j));
+			Row rows = new Row(Integer.toString(month), Integer.toString(monthlyWeight),
+					Double.toString(monthlyPercentage));
+			table.getItems().add(rows);
+			month++;
+		}
+	}
+
+	public void displayTable() {
+		Stage pop = new Stage();
+		pop.initModality(Modality.APPLICATION_MODAL);
+		pop.setTitle("Report");
+		Button closeBtn = new Button("Close");
+		closeBtn.setOnAction(e -> pop.close());
+
+		TableView table = new TableView();
+		monthlyReport(dManager.getMonthlyMaxForFarm(tf1.getText(), tf3.getText()), textFont, table);
+
+		BorderPane root = new BorderPane();
+		root.setLeft(table);
+		Scene popup = new Scene(root, 500, 300);
+		pop.setScene(popup);
+		pop.showAndWait();
+	}
 
 }
