@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,9 +38,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GUI2 extends BorderPane {
-    FileManagerDummy fManager = new FileManagerDummy();
+//    FileManagerDummy fManager = new FileManagerDummy();
+	File_Manager fManager = new File_Manager();
     DataManagerDummy dManager = new DataManagerDummy();
 
+    File file;
+	ListView<String> listView;
+	ObservableList<String> list;
+	List<File> fileList;
     Font textFont = new Font("Ariel", 18);
 
     // initialization for essential elements
@@ -48,7 +55,7 @@ public class GUI2 extends BorderPane {
     Label date1 = new Label("Start Date: ");
     Label date2 = new Label("End Date: ");
     Label sortedLabel = new Label("Sorted by: ");
-    Label file = new Label("File Name: ");
+    Label fileLabel = new Label("File Name: ");
     Label reportLabel = new Label("Choose report Type: ");
     TextArea message = new TextArea(
             "DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n" + "Monthly report: Fill year and month\n"
@@ -61,6 +68,10 @@ public class GUI2 extends BorderPane {
     TextField tf4 = new TextField();// start date
     TextField tf5 = new TextField();// end date
     TextField fileName = new TextField();
+    // button to submit info entered
+    Button submitBtn = new Button("sumbit all");
+    Button loadFile = new Button("load");
+    Button saveFile = new Button("save");
 
     GUI2() {
         farmID.setFont(textFont);
@@ -69,7 +80,7 @@ public class GUI2 extends BorderPane {
         date1.setFont(textFont);
         date2.setFont(textFont);
         sortedLabel.setFont(textFont);
-        file.setFont(textFont);
+        fileLabel.setFont(textFont);
         reportLabel.setFont(new Font(16));
         message.setFont(textFont);
         message.setEditable(false);
@@ -84,12 +95,10 @@ public class GUI2 extends BorderPane {
 
         ComboBox reportCbox = new ComboBox(options);
 
-        // button to submit info entered
-        Button submitBtn = new Button("sumbit all");
-        Button loadFile = new Button("load");
-        Button saveFile = new Button("save");
+       
 
         loadFile.setOnAction(e -> {
+        	File_Manager.enlistAllFiles(new Stage(), fileList, tableTitle, listView, list);
             if (fManager.readFile(fileName.getText())) {
                 message.appendText("\nFile loaded");
             }
@@ -145,7 +154,7 @@ public class GUI2 extends BorderPane {
 
         // vbox for textField labels
         VBox vbox1 = new VBox();
-        vbox1.getChildren().addAll(file, farmID, month, year, date1, date2);
+        vbox1.getChildren().addAll(fileLabel, farmID, month, year, date1, date2);
 
         // vbox for textField
         VBox vbox2 = new VBox();
