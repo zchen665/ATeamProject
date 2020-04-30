@@ -1,5 +1,5 @@
-
-public class test {
+package application;
+public class DSmethodExamples {
 
 	public static void main(String[] args) {
 		cheeseFactory f1 = new cheeseFactory();

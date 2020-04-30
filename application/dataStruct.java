@@ -63,7 +63,7 @@ public interface dataStruct<K extends Comparable<K>, V> {
 	/**
 	 * calculates the sum of milk of a specific farm
 	 * 
-	 * @param date   in form of "farm #"
+	 * @param farmID in form of "farm #"
 	 * @return -1 if farmid is not correct
 	 * 			0 if no data is found on the specific date;
 	 * 			sum  the correct sum if works correctly
@@ -97,7 +97,7 @@ public interface dataStruct<K extends Comparable<K>, V> {
 	 * calculates the amount of milk of a specific year
 	 * 
 	 * 
-	 * @param month in form of "#" a number representing a year
+	 * @param year in form of "#" a number representing a year
 	 * @return -1 if date is not entered correctly
 	 * 			0 if no data is found on the specific year;
 	 * 			sum  the correct sum if works correctly

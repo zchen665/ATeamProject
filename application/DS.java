@@ -1,6 +1,5 @@
 package application;
 
-import java.text.ParseException;
 import java.util.*;
 
 public class DS {
@@ -11,8 +10,8 @@ public class DS {
   public Map<String, List<ReportForTheFarm>> dailyReportForTheFarms;
 
   public DS() {
-    farmNames = new LinkedList<>();
-    farmWeight = new LinkedList<>();
+    farmNames = new ArrayList<>();
+    farmWeight = new ArrayList<>();
     farmReportDaily = new HashMap<>(); //Farm-Based Report for each day
     dailyReportForTheFarms = new HashMap<>(); //Daily Report for each farm
   }
@@ -48,6 +47,12 @@ public class DS {
     }
   }
 
+  /**
+   * Add a farm-based report for a specific day
+   * @param date
+   * @param farmName
+   * @param weight
+   */
   public void addDailyReportForTheFarm(String date, String farmName, String weight) {
     if (!dailyReportForTheFarms.containsKey(date)) {
       if (!farmNames.contains(farmName)) {
@@ -72,20 +77,24 @@ public class DS {
     }
   }
 
-  private class ReportForTheFarm {
-    Map<String, Double> farmReport = new HashMap<>();
+  public class ReportForTheFarm {
+    public String farmName;
+    public Double weight;
 
-    private ReportForTheFarm(String farmName, Double weight) {
-      farmReport.put(farmName, weight);
+    public ReportForTheFarm(String farmName, Double weight) {
+      this.farmName = farmName;
+      this.weight = weight;
     }
   }
 
 
-  private class ReportForTheDay {
-    Map<String, Double> dailyReport = new HashMap<>();
+  public class ReportForTheDay {
+    public String date;
+    public Double weight;
 
-    private ReportForTheDay(String date, Double weight) {
-      dailyReport.put(date, weight);
+    public ReportForTheDay(String date, Double weight) {
+      this.date = date;
+      this.weight = weight;
     }
   }
 }
