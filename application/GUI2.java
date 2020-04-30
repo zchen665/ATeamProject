@@ -98,7 +98,7 @@ public class GUI2 extends BorderPane {
 
 		loadFile.setOnAction(e -> {
 //			try {
-				File_Manager.enlistAllFiles(new Stage(), fileList, tableTitle, listView, list);
+				File_Manager.enlistAllFiles(new Stage(), fileList, listView, list);
 				dManager = new DataManager(File_Manager.cf);
 //			} catch (NumberFormatException e1) {
 //				message.appendText("Error reading file");

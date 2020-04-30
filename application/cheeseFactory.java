@@ -20,6 +20,10 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
         //check if added successfully
         return factory.size() == a;
     }
+    
+    public int size() {
+    	return factory.size();
+    }
 
     @Override
     public boolean clearDate(K date) {

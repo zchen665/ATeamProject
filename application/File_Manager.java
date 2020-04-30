@@ -14,6 +14,7 @@ public class File_Manager {
 	PrintWriter pw = null;
 	List<File> files = new LinkedList<>(); // All files in a particular folder
 	static cheeseFactory cf = new cheeseFactory();
+
 	boolean writeToFile(String outputFile) {
 		System.out.println("Call writeTofile in fManager");
 		try {
@@ -33,8 +34,8 @@ public class File_Manager {
 	 * @param folder
 	 * @return
 	 */
-	public static List<File> enlistAllFiles(Stage primaryStage, List<File> fileList, Label file,
-			ListView<String> listView, ObservableList<String> list) {
+	public static void enlistAllFiles(Stage primaryStage, List<File> fileList, ListView<String> listView,
+			ObservableList<String> list) {
 		FileChooser fileChooser = new FileChooser();
 		// Open directory from existing directory
 		if (fileList != null) {
@@ -52,39 +53,46 @@ public class File_Manager {
 		fileList = fileChooser.showOpenMultipleDialog(primaryStage);
 
 		list.clear();
-		for (int i = 0; i < fileList.size(); i++) {
-			list.add(fileList.get(i).getPath());
+		try {
+			for (int i = 0; i < fileList.size(); i++) {
+				list.add(fileList.get(i).getPath());
+			}
+		} catch (NullPointerException e) {
+			return;
 		}
 		// System.out.println(list);
 		listView.setItems(list);
 		ArrayList<ArrayList<String>> allData = CSV2Array(list.get(0));
+		for (int i = 1; i < list.size(); i++) {
+			allData.addAll(CSV2Array(list.get(i)));
+		}
 
 		ArrayList<String> dates = new ArrayList<String>();
 		for (int i = 0; i < allData.size(); i++) {
-			dates.add(allData.get(i).get(0));
+			if (!allData.get(i).get(0).contains("date"))
+				dates.add(allData.get(i).get(0));
 		}
 		// System.out.println(dates);
 
 		ArrayList<String> ids = new ArrayList<String>();
 		for (int i = 0; i < allData.size(); i++) {
-			ids.add(allData.get(i).get(1));
+			if (!allData.get(i).get(1).contains("farm_id"))
+				ids.add(allData.get(i).get(1));
 		}
-		// System.out.println(ids);
-
+		
 		ArrayList<String> weights = new ArrayList<String>();
 		for (int i = 0; i < allData.size(); i++) {
-			weights.add(allData.get(i).get(2));
+			if (!allData.get(i).get(2).contains("weight"))
+				weights.add(allData.get(i).get(2));
 		}
-		// System.out.println(weights);
 
 		// insert into DS
 //		cheeseFactory cf = new cheeseFactory();
-		for (int i = 0; i < allData.size(); i++) {
-				cf.insertData(dates.get(i), ids.get(i), weights.get(i));
+		for (int i = 0; i < dates.size(); i++) {
+			cf.insertData(dates.get(i), ids.get(i), weights.get(i));
 		}
 		// System.out.println(cf.getSumMonth("5"));
-		return fileList;
-
+		return;
 	}
 
 	public static ArrayList<ArrayList<String>> CSV2Array(String path) {
