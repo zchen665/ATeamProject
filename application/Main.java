@@ -2,7 +2,7 @@
  * Title:            Milk Weight Analyzer
  * Files:            Main.java
  * Semester:         CS400, Spring 2020
-
+ * <p>
  * Authors:           Zhengzhi chen jiong chen
  * Lecturer's Name:  Deppler
  * Lecture Number:   001
@@ -43,38 +43,37 @@ import javafx.stage.Stage;
 
 /**
  * class implementing the gui interface
- * 
+ *
  * @author
  *
  */
 public class Main extends Application {
 
-	// store any command-line arguments that were entered.
-	// NOTE: this.getParameters().getRaw() will get these also
-	private List<String> args;
+    private static final int WINDOW_WIDTH = 1000;
+    private static final int WINDOW_HEIGHT = 550;
+    private static final String APP_TITLE = "Milk Weight Analyzer";
+    // store any command-line arguments that were entered.
+    // NOTE: this.getParameters().getRaw() will get these also
+    private List<String> args;
 
-	private static final int WINDOW_WIDTH = 1000;
-	private static final int WINDOW_HEIGHT = 550;
-	private static final String APP_TITLE = "Milk Weight Analyzer";
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		BorderPane root = new BorderPane();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        BorderPane root = new BorderPane();
 
-		// Create Scene
-		GUI2 gui = new GUI2();
-		Scene mainScene = new Scene(gui, WINDOW_WIDTH, WINDOW_HEIGHT);
+        // Create Scene
+        GUI2 gui = new GUI2();
+        Scene mainScene = new Scene(gui, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-		// Add the stuff and set the primary stage
-		primaryStage.setTitle(APP_TITLE);
-		primaryStage.setScene(mainScene);
-		primaryStage.show();
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		launch(args);
-	}
+        // Add the stuff and set the primary stage
+        primaryStage.setTitle(APP_TITLE);
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+    }
 }
