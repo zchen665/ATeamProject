@@ -17,10 +17,10 @@ public class DataManager {
     public DataManager(cheeseFactory<String, Double> cf) {
         this.cf = cf;
         String[][] allData = cf.getAllData();
-        for (int i = 1; i < allData.length; i++) {
+        for (int i = 0; i < allData.length; i++) {
             ds.addFarmReportForTheDay(allData[i][1], allData[i][0], allData[i][2]);
         }
-        for (int i = 1; i < allData.length; i++) {
+        for (int i = 0; i < allData.length; i++) {
             ds.addDailyReportForTheFarm(allData[i][0], allData[i][1], allData[i][2]);
         }
         Collections.sort(ds.farmNames);
