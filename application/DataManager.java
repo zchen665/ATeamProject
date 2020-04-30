@@ -9,10 +9,12 @@ import java.util.*;
  */
 public class DataManager {
 
-  List<Double> list = Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
-  DS ds = new DS();
+  private final List<Double> list = new ArrayList<>(12);
+  private final DS ds = new DS();
+  private final cheeseFactory<String, Double> cf;
 
-  public DataManager(cheeseFactory cf) {
+  public DataManager(cheeseFactory<String, Double> cf) {
+    this.cf = cf;
     String[][] allData = cf.getAllData();
     for (int i = 1; i < allData.length; i++) {
       ds.addFarmReportForTheDay(allData[i][1], allData[i][0], allData[i][2]);
@@ -39,14 +41,7 @@ public class DataManager {
   public DS getMonthlyAverage(String month, String year) {
     int days = getDaysForTheMonth(month, year);
     for (String farmName : ds.farmNames) {
-      List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
-      double total = 0.0;
-      for (DS.ReportForTheDay reportForTheDay : DailyReports) {
-        String date = reportForTheDay.date;
-        if (date.contains(month) && date.contains(year)) {
-          total += reportForTheDay.weight;
-        }
-      }
+      double total = cf.getSumFarm(farmName);
       double avg = total / days;
       ds.farmWeight.add(avg);
     }
@@ -74,7 +69,6 @@ public class DataManager {
    * @param year
    * @return
    */
-
   //get monthlymin returns a list of information on min daily milk weight
   //in that month for each farm
   public DS getMonthlyMin(String month, String year) {
@@ -114,10 +108,32 @@ public class DataManager {
   }
 
   public DS getMonthlyReport(String month, String year) {
+    ds.farmWeight.clear();
+    for (String farmName : ds.farmNames) {
+      double total = cf.getSumFarm(farmName);
+      ds.farmWeight.add(total);
+    }
     return ds;
   }
 
+  /**
+   * Given a farm id and a year, displays the total weight of milk of this farm for each month
+   *
+   * @param farmName
+   * @param year
+   * @return
+   */
   public List<Double> getFarmReport(String farmName, String year) {
+    List<DS.ReportForTheDay> reports = ds.farmReportDaily.get(farmName);
+    for (int i = 0; i < list.size(); i++) {
+      int month = i + 1;
+      Double current = list.get(i);
+      for (DS.ReportForTheDay report : reports) {
+        if (report.date.contains(year) && report.date.contains("-" + Integer.toString(month))) {
+          list.set(i, current + report.weight);
+        }
+      }
+    }
     return list;
   }
 
