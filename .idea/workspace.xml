@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/DS.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/DS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/DSmethodExamples.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/DSmethodExamples.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/DataManagerDummy.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/DataManagerDummy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/FileManagerDummy.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/FileManagerDummy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/GUI2.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/GUI2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/cheeseFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/cheeseFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/dataStruct.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/dataStruct.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,7 +217,7 @@
       <workItem from="1588133870058" duration="10394000" />
       <workItem from="1588196559445" duration="245000" />
       <workItem from="1588196808109" duration="15818000" />
-      <workItem from="1588215214677" duration="9882000" />
+      <workItem from="1588215214677" duration="12030000" />
     </task>
     <servers />
   </component>

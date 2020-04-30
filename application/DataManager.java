@@ -1,9 +1,6 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Defines operation on data manipulations and forming the required data for the visualizer
@@ -82,6 +79,7 @@ public class DataManager {
     //in that month for each farm
     public DS getMonthlyMin(String month, String year) {
         ds.farmWeight.clear();
+        Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
             double min = DailyReports.get(0).weight;
@@ -105,6 +103,7 @@ public class DataManager {
      */
     public DS getMonthlyMax(String month, String year) {
         ds.farmWeight.clear();
+        Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
             double max = DailyReports.get(0).weight;
@@ -128,6 +127,7 @@ public class DataManager {
      */
     public DS getMonthlyReport(String month, String year) {
         ds.farmWeight.clear();
+        Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
             double total = cf.getSumFarm(farmName);
             ds.farmWeight.add(total);
@@ -253,6 +253,7 @@ public class DataManager {
      */
     public DS getAnnual(String year) {
         ds.farmWeight.clear();
+        Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
             Double sum = 0.0;
             List<Double> weightReportForTheYear = getAnnualForFarm(farmName, year);
@@ -281,6 +282,10 @@ public class DataManager {
     }
 
     /**
+     * Prompt user for start date (year-month-day) and end month-day,
+     * Then display the total milk weight per farm and the percentage of the total for each farm over that date range.
+     * The list must be sorted by Farm ID, or you can prompt for ascending or descending order by weight or percentage.
+     *
      * @param startDate
      * @param endDate
      * @return
@@ -288,6 +293,41 @@ public class DataManager {
     //changed from average to total based on the specification
     // sort by total milk weight over the data range
     public DS getTotalInDateRange(String startDate, String endDate) {
+        ds.farmWeight.clear();
+        Collections.sort(ds.farmNames);
+        Map<Double, String> corresMap = new HashMap<>();
+        for (String farmName : ds.farmNames) {
+            Double sum = 0.0;
+            List<Double> weightReportForTheRange = getSpecifiedRangeReportForFarm(startDate, endDate, farmName);
+            for (Double d : weightReportForTheRange) {
+                sum += d;
+            }
+            ds.farmWeight.add(sum);
+            corresMap.put(sum, farmName);
+        }
+        // Sort by total milk weight
+        Collections.sort(ds.farmWeight);
+        ds.farmNames.clear();
+        for (Double weight : ds.farmWeight) {
+            ds.farmNames.add(corresMap.get(weight));
+        }
         return ds;
+    }
+
+    /**
+     * @param startDate
+     * @param endDate
+     * @param farmName
+     * @return
+     */
+    private List<Double> getSpecifiedRangeReportForFarm(String startDate, String endDate, String farmName) {
+        List<DS.ReportForTheDay> reports = ds.farmReportDaily.get(farmName);
+        List<Double> reportForTheYear = new ArrayList<>();
+        for (DS.ReportForTheDay report : reports) {
+            if (report.date.compareTo(startDate) >= 0 && report.date.compareTo(endDate) <= 0) {
+                reportForTheYear.add(report.weight);
+            }
+        }
+        return reportForTheYear;
     }
 }
