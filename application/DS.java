@@ -9,6 +9,9 @@ public class DS {
   public Map<String, List<ReportForTheDay>> farmReportDaily;
   public Map<String, List<ReportForTheFarm>> dailyReportForTheFarms;
 
+  /**
+   *
+   */
   public DS() {
     farmNames = new ArrayList<>();
     farmWeight = new ArrayList<>();
@@ -49,6 +52,7 @@ public class DS {
 
   /**
    * Add a farm-based report for a specific day
+   *
    * @param date
    * @param farmName
    * @param weight
@@ -77,6 +81,9 @@ public class DS {
     }
   }
 
+  /**
+   *
+   */
   public class ReportForTheFarm {
     public String farmName;
     public Double weight;
@@ -88,6 +95,9 @@ public class DS {
   }
 
 
+  /**
+   *
+   */
   public class ReportForTheDay {
     public String date;
     public Double weight;
