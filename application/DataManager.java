@@ -7,9 +7,10 @@ import java.util.*;
  */
 public class DataManager {
 
-    private final List<Double> list = new ArrayList<>(12);
     private final DS ds = new DS();
     private final cheeseFactory<String, Double> cf;
+
+    private final ArrayList<Double> list = new ArrayList<>(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 
     /**
      * @param cf
@@ -145,14 +146,17 @@ public class DataManager {
     public List<Double> getFarmReport(String farmName, String year) {
         clear(list);
         List<DS.ReportForTheDay> reports = ds.farmReportDaily.get(farmName);
+        System.out.println(reports.toString());
+        System.out.println(reports.size());
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
             Double current = list.get(i);
             for (DS.ReportForTheDay report : reports) {
                 if (report.date.contains(year) && report.date.contains("-" + month + "-")) {
-                    list.set(i, current + report.weight);
+                    current += report.weight;
                 }
             }
+            list.set(i, current);
         }
         System.out.println(list.toString());
         return list;
@@ -163,9 +167,10 @@ public class DataManager {
      *
      * @param list
      */
-    private void clear(List<Double> list) {
-        for (Double d : list)
-            d = 0.0;
+    private void clear(ArrayList<Double> list) {
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, 0.0);
+        }
     }
 
     /**
