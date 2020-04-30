@@ -154,6 +154,7 @@ public class DataManager {
                 }
             }
         }
+        System.out.println(list.toString());
         return list;
     }
 

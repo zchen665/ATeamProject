@@ -9,7 +9,7 @@ import java.util.regex.PatternSyntaxException;
  * @author Jiahe Wang
  */
 public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, V> {
-    //private global list that will record all the data of each farm
+    // global list that will record all the data of each farm
     private final ArrayList<farm> factory = new ArrayList<>();
 
     @Override
@@ -269,7 +269,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
                         year = -1;
                         month = -1;
                         day = -1;
-//                        throw new NumberFormatException();
+                        throw new NumberFormatException();
                     }
                 }
             }

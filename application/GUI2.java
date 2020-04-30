@@ -97,12 +97,12 @@ public class GUI2 extends BorderPane {
 		ComboBox reportCbox = new ComboBox(options);
 
 		loadFile.setOnAction(e -> {
-//			try {
+			try {
 				File_Manager.enlistAllFiles(new Stage(), fileList, listView, list);
 				dManager = new DataManager(File_Manager.cf);
-//			} catch (NumberFormatException e1) {
-//				message.appendText("Error reading file");
-//			}
+			} catch (NumberFormatException e1) {
+				message.appendText("Error reading file");
+			}
 			message.appendText("\nFile read");
 		});
 
