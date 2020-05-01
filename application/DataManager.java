@@ -146,11 +146,11 @@ public class DataManager {
                     dailyReportsForTheMonth.add(reportForTheDay.weight);
                 }
             }
-            double max = 0.0;
+            double sum = 0.0;
             for (Double d : dailyReportsForTheMonth) {
-                max += d;
+                sum += d;
             }
-            ds.farmWeight.add(max);
+            ds.farmWeight.add(sum);
         }
         return ds;
     }
