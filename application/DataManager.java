@@ -4,19 +4,20 @@ import java.util.*;
 
 /**
  * Defines operation on data manipulations and forming the required data for the visualizer
+ *
+ * @author Jitian Liu
  */
 public class DataManager {
 
     private final DS ds = new DS();
-    private final cheeseFactory<String, Double> cf;
-
     private final ArrayList<Double> list = new ArrayList<>(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 
     /**
-     * @param cf
+     * Set up the DataManager, given a repository of farms, namely, the cheese factory
+     *
+     * @param cf the cheese factory to be analyzed
      */
     public DataManager(cheeseFactory<String, Double> cf) {
-        this.cf = cf;
         String[][] allData = cf.getAllData();
         for (int i = 0; i < allData.length; i++) {
             ds.addFarmReportForTheDay(allData[i][1], allData[i][0], allData[i][2]);
@@ -43,9 +44,19 @@ public class DataManager {
     public DS getMonthlyAverage(String month, String year) {
         int days = getDaysForTheMonth(month, year);
         for (String farmName : ds.farmNames) {
-            double total = cf.getSumFarm(farmName);
-            double avg = total / days;
-            ds.farmWeight.add(avg);
+            List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
+            for (DS.ReportForTheDay reportForTheDay : DailyReports) {
+                String date = reportForTheDay.date;
+                if (date.contains("-" + month + "-") && date.contains(year)) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double sum = 0.0;
+            for (Double d : dailyReportsForTheMonth) {
+                sum += d;
+            }
+            ds.farmWeight.add(sum / days);
         }
         return ds;
     }
@@ -218,7 +229,7 @@ public class DataManager {
         clear(list);
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
-            List<Double> monthlyReport = getMonthlyFarmReport(farmName, year, month);
+            List<Double> monthlyReport = new ArrayList<>(getMonthlyFarmReport(farmName, year, month));
             double min = monthlyReport.get(0);
             for (double d : monthlyReport) {
                 if (min >= d) {
@@ -251,7 +262,7 @@ public class DataManager {
         clear(list);
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
-            List<Double> monthlyReport = getMonthlyFarmReport(farmName, year, month);
+            List<Double> monthlyReport = new ArrayList<>(getMonthlyFarmReport(farmName, year, month));
             double max = monthlyReport.get(0);
             for (double d : monthlyReport) {
                 if (max <= d) {
@@ -261,14 +272,6 @@ public class DataManager {
             list.set(i, max);
         }
         return list;
-    }
-
-    /**
-     * @return
-     */
-    public List<Double> getDataSortedByField() {
-        // TODO: Aborted
-        return null;
     }
 
     /**
