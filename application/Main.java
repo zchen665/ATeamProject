@@ -116,20 +116,3 @@ public class Main extends Application {
 		launch(args);
 	}
 }
-//public void start(Stage primaryStage) throws Exception {
-//	GUI2 root = new GUI2();
-//	Font textFont = new Font("Ariel", 18);
-//
-//	
-////	final Label labelFile = new Label();
-////	loadFile.setOnAction(e ->{File_Manager.enlistAllFiles(primaryStage,fileList,file,listView,list);});
-//	
-//
-//	// Create Scene
-//	Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-//
-//	// Add the stuff and set the primary stage
-//	primaryStage.setTitle(APP_TITLE);
-//	primaryStage.setScene(mainScene);
-//	primaryStage.show();
-//}

@@ -60,9 +60,11 @@ public class GUI2 extends BorderPane {
 	Label reportLabel = new Label("Choose report Type: ");
 	TextArea message = new TextArea(
 			"DISPLAY MESSAGE:\n" + "Farm report: Fill FarmID and Year \n" + "Monthly report: Fill year and month\n"
-					+ "Annual report: Fill year\n" + "Date range report: Fill both start and end dates.\n"
-					+ "min max, and average for monthly and farm report will be listed here.");
+					+ "Annual report: Fill year\n" + "Date range report: Fill both start and end dates.\n" + "");
 
+	TextArea outMessage = new TextArea("WElCOME!\nNote: output file will be generated according to the\n report types"
+			+ " you have generated. if you requested no \nreports there won't be any data in the file. If you generated"
+			+ "\nmonthly and farm reports during the session, output file \nwill have both of those reports.");
 	TextField tf1 = new TextField();// farm ID
 	TextField tf2 = new TextField();// month
 	TextField tf3 = new TextField();// year
@@ -73,12 +75,13 @@ public class GUI2 extends BorderPane {
 	Button submitBtn = new Button("sumbit all");
 	Button loadFile = new Button("load");
 	Button saveFile = new Button("save");
+	Button clearData = new Button("clear data");
 
 	/**
-	 * Constructor of GUI 
+	 * Constructor of GUI
 	 */
 	GUI2() {
-	    // set the font for each element
+		// set the font for each element
 		farmID.setFont(textFont);
 		month.setFont(textFont);
 		year.setFont(textFont);
@@ -87,9 +90,17 @@ public class GUI2 extends BorderPane {
 		sortedLabel.setFont(textFont);
 		fileLabel.setFont(textFont);
 		reportLabel.setFont(new Font(16));
+		fileName.setPromptText("Output File Name Here");
+		tf4.setPromptText("yyyy-mm-dd");
+		tf5.setPromptText("yyyy-mm-dd");
+
 		message.setFont(textFont);
 		message.setEditable(false);
-		message.setPrefSize(10, 300);// need to resize
+		message.setPrefSize(10, 250);// need to resize
+		
+		outMessage.setEditable(false);
+		outMessage.setPrefSize(350,100);
+		
 
 		// initialize the tableview
 		TableView table = new TableView();
@@ -101,21 +112,26 @@ public class GUI2 extends BorderPane {
 				"Monthly Report", "Monthly Report(detailed)", "Annual Report", "Date Range Report");
 
 		ComboBox reportCbox = new ComboBox(options);
-		
+
 		// set action for loading the file
 		loadFile.setOnAction(e -> {
 			try {
-			  //reads the file
-				File_Manager.enlistAllFiles(new Stage(), fileList, listView, list);
-				dManager = new DataManager(File_Manager.cf);
-				message.appendText("\nFile read");
+				// reads the file
+				if (File_Manager.enlistAllFiles(new Stage(), fileList, listView, list)) {
+					dManager = new DataManager(File_Manager.cf);
+					message.appendText("\nFile read");
+				}
 			} catch (NumberFormatException e1) {
 				message.appendText("\n!!!Error reading file!!!");
 			}
+
+			fileName.setPromptText("Output File Name Here");
+			tf4.setPromptText("yyyy-mm-dd");
+			tf5.setPromptText("yyyy-mm-dd");
 		});
 		// set action for saving the file
-		saveFile.setOnAction(e -> { 
-		  // save the file
+		saveFile.setOnAction(e -> {
+			// save the file
 			if (fManager.writeToFile(fileName.getText(), outputStr)) {
 				message.appendText("\nFile saved");
 			}
@@ -129,53 +145,59 @@ public class GUI2 extends BorderPane {
 			else if (reportCbox.getValue() == null) {
 				message.appendText("\nPlease select the report type first.");
 			} else if (reportCbox.getValue().equals(options.get(0))) {
-			  //farm report
+				// farm report
 				if (tf1.getText().length() != 0 && tf3.getText().length() != 0) {
-				  // Check if the input is missing
+					// Check if the input is missing
 					displayTable(tf1.getText(), tf2.getText(), options.get(0));
 				} else
 					message.appendText("\nPlease fill Farm ID and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(1))) {
-			  //farm report detailed
+				// farm report detailed
 				if (tf1.getText().length() != 0 && tf3.getText().length() != 0) {
-				  // Check if the input is missing
+					// Check if the input is missing
 					displayTable(tf1.getText(), tf2.getText(), options.get(1));
 				} else
 					message.appendText("\nPlease fill Farm ID and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(2))) {
-			  //Monthly Report
+				// Monthly Report
 				if (tf2.getText().length() != 0 && tf3.getText().length() != 0) {
-				  // Check if the input is missing
+					// Check if the input is missing
 					displayTable(tf2.getText(), tf3.getText(), options.get(2));
 				} else
 					message.appendText("\nPlease fill month and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(3))) {
-			  //Monthly report detailed
+				// Monthly report detailed
 				if (tf2.getText().length() != 0 && tf3.getText().length() != 0) {
-				  // Check if the input is missing
+					// Check if the input is missing
 					displayTable(tf2.getText(), tf3.getText(), options.get(3));
 				} else
 					message.appendText("\nPlease fill month and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(4))) {
-			  //Annual report
+				// Annual report
 				if (tf3.getText().length() != 0) {
-				  // Check if the input is missing
+					// Check if the input is missing
 					displayTable(null, tf3.getText(), options.get(4));
 				} else
 					message.appendText("\nPlease fill Year field");
 			} else if (reportCbox.getValue().equals(options.get(5))) {
-			  //Date range report
+				// Date range report
 				if (tf4.getText().length() != 0 && tf5.getText().length() != 0) {
-				  // Check if the input is missing
+					// Check if the input is missing
 					displayTable(tf4.getText(), tf5.getText(), options.get(5));
 				} else
 					message.appendText("\nPlease fill start and end date fields");
 			}
 		});
 
+		clearData.setOnAction(e -> {
+			dManager = null;
+			outputStr = null;
+		});
+
 		// hbox to add load/save bottons
 		HBox hboxBtn = new HBox();
-		hboxBtn.getChildren().addAll(loadFile, saveFile);
+		hboxBtn.setSpacing(3);
+		hboxBtn.getChildren().addAll(loadFile, saveFile, clearData);
 
 		// vbox for textField labels
 		VBox vbox1 = new VBox();
@@ -195,7 +217,7 @@ public class GUI2 extends BorderPane {
 		HBox hbox = new HBox();
 		hbox.setPadding(new Insets(15, 12, 15, 12));
 		hbox.setSpacing(30);
-		hbox.getChildren().addAll(vbox1, vbox2, vbox3);
+		hbox.getChildren().addAll(vbox1, vbox2, vbox3, outMessage);
 
 		// vbox for text fields
 		VBox outer_vbox = new VBox();
@@ -209,15 +231,16 @@ public class GUI2 extends BorderPane {
 
 	/**
 	 * Methods to add the monthly information into the tableview
+	 * 
 	 * @param list
 	 * @param table
 	 */
 	public void month_weight_percentReport(List<Double> list, TableView table) {
-	    //refresh table each time call the meothod
+		// refresh table each time call the meothod
 		table.refresh();
 		table.getItems().clear();
-		
-		//Initialize the three column title for the table 
+
+		// Initialize the three column title for the table
 		TableColumn farm = new TableColumn("Month");
 		farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
 		TableColumn weight = new TableColumn("Total Weight");
@@ -228,7 +251,7 @@ public class GUI2 extends BorderPane {
 		table.getColumns().addAll(farm, weight, percentage);
 		outputStr += "Month, Weight, percentage\n";
 		double sum = 0;
-		//calculating the sum of weight for later calculating the percentage
+		// calculating the sum of weight for later calculating the percentage
 		for (int i = 0; i < list.size(); i++) {
 			sum = sum + list.get(i);
 		}
@@ -237,27 +260,28 @@ public class GUI2 extends BorderPane {
 		double monthlyPercentage = 0;
 		// loop through each element to get the weight and percentage
 		for (int j = 0; j < list.size(); j++) {
-			String row = "row"; //set up the name for each object
-			monthlyWeight = list.get(j); //store the weight
-			monthlyPercentage = monthlyWeight / sum; //store the percentage
+			String row = "row"; // set up the name for each object
+			monthlyWeight = list.get(j); // store the weight
+			monthlyPercentage = monthlyWeight / sum; // store the percentage
 			row = row.concat(Integer.toString(j));
 			outputStr += Integer.toString(month) + ", " + Double.toString(monthlyWeight) + ", "
 					+ Double.toString(monthlyPercentage) + "\n";
 			Row rows = new Row(Integer.toString(month), Double.toString(monthlyWeight),
 					Double.toString(monthlyPercentage));
 			table.getItems().add(rows); // add the row into the table
-			month++; // increment the month 
+			month++; // increment the month
 		}
 		outputStr += "End of Report \n";
 	}
 
 	/**
 	 * The method to display the weight and percentage of farm
+	 * 
 	 * @param ds
 	 * @param table
 	 */
 	public void id_weight_percentReport(application.DS ds, TableView table) {
-	    //refresh the table each time when call the method
+		// refresh the table each time when call the method
 		table.refresh();
 		table.getItems().clear();
 		TableColumn farm = new TableColumn("Farm Name");
@@ -281,7 +305,7 @@ public class GUI2 extends BorderPane {
 			monthlyWeight = ds.farmWeight.get(j);
 			monthlyPercentage = monthlyWeight / sum;
 			outputStr += ds.farmNames.get(j) + ", " + Double.toString(monthlyWeight) + ", "
-					+ Double.toString(monthlyPercentage) +"\n";
+					+ Double.toString(monthlyPercentage) + "\n";
 			Row rows = new Row(ds.farmNames.get(j), Double.toString(monthlyWeight), Double.toString(monthlyPercentage));
 			table.getItems().add(rows);
 		}
@@ -355,14 +379,14 @@ public class GUI2 extends BorderPane {
 			month_min_ave_maxReport(param1, param2, table);
 			pop.setTitle("Farm Report(detailed)");
 		} else if (option.equals("Monthly Report")) {
-			outputStr += "\n-Monthly Report for " + param1 + " " + param2+ "\n";
+			outputStr += "\n-Monthly Report for " + param1 + " " + param2 + "\n";
 			id_weight_percentReport(dManager.getMonthlyReport(param1, param2), table);
 			pop.setTitle("Monthly Report");
 		} else if (option.equals("Monthly Report(detailed)")) {
 			id_min_ave_maxReport(param1, param2, table);
 			pop.setTitle("Monthly Report(detailed)");
 		} else if (option.equals("Annual Report")) {
-			outputStr += "\n-Annual Report for " + param2+ "\n";
+			outputStr += "\n-Annual Report for " + param2 + "\n";
 			id_weight_percentReport(dManager.getAnnual(param2), table);
 			pop.setTitle("Annual Report");
 		} else if (option.equals("Date Range Report")) {

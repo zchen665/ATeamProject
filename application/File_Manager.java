@@ -32,7 +32,7 @@ public class File_Manager {
 	 * @param folder
 	 * @return
 	 */
-	public static void enlistAllFiles(Stage primaryStage, List<File> fileList, ListView<String> listView,
+	public static boolean enlistAllFiles(Stage primaryStage, List<File> fileList, ListView<String> listView,
 			ObservableList<String> list) {
 		FileChooser fileChooser = new FileChooser();
 		// Open directory from existing directory
@@ -56,7 +56,7 @@ public class File_Manager {
 				list.add(fileList.get(i).getPath());
 			}
 		} catch (NullPointerException e) {
-			return;
+			return false;
 		}
 		// System.out.println(list);
 		listView.setItems(list);
@@ -77,7 +77,7 @@ public class File_Manager {
 			if (!allData.get(i).get(1).contains("farm_id"))
 				ids.add(allData.get(i).get(1));
 		}
-		
+
 		ArrayList<String> weights = new ArrayList<String>();
 		for (int i = 0; i < allData.size(); i++) {
 			if (!allData.get(i).get(2).contains("weight"))
@@ -85,12 +85,14 @@ public class File_Manager {
 		}
 
 		// insert into DS
-//		cheeseFactory cf = new cheeseFactory();
 		for (int i = 0; i < dates.size(); i++) {
 			cf.insertData(dates.get(i), ids.get(i), weights.get(i));
 		}
-		// System.out.println(cf.getSumMonth("5"));
-		return;
+		if (allData != null && allData.size() > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static ArrayList<ArrayList<String>> CSV2Array(String path) {
