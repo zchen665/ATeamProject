@@ -213,7 +213,7 @@ public class DataManager {
             }
             list.set(i, current);
         }
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**
