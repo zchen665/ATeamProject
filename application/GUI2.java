@@ -74,7 +74,11 @@ public class GUI2 extends BorderPane {
 	Button loadFile = new Button("load");
 	Button saveFile = new Button("save");
 
+	/**
+	 * Constructor of GUI 
+	 */
 	GUI2() {
+	    // set the font for each element
 		farmID.setFont(textFont);
 		month.setFont(textFont);
 		year.setFont(textFont);
@@ -87,6 +91,7 @@ public class GUI2 extends BorderPane {
 		message.setEditable(false);
 		message.setPrefSize(10, 300);// need to resize
 
+		// initialize the tableview
 		TableView table = new TableView();
 		Label tableTitle = new Label("Report");
 		list = FXCollections.observableArrayList();
@@ -96,9 +101,11 @@ public class GUI2 extends BorderPane {
 				"Monthly Report", "Monthly Report(detailed)", "Annual Report", "Date Range Report");
 
 		ComboBox reportCbox = new ComboBox(options);
-
+		
+		// set action for loading the file
 		loadFile.setOnAction(e -> {
 			try {
+			  //reads the file
 				File_Manager.enlistAllFiles(new Stage(), fileList, listView, list);
 				dManager = new DataManager(File_Manager.cf);
 				message.appendText("\nFile read");
@@ -106,8 +113,9 @@ public class GUI2 extends BorderPane {
 				message.appendText("\n!!!Error reading file!!!");
 			}
 		});
-
-		saveFile.setOnAction(e -> {
+		// set action for saving the file
+		saveFile.setOnAction(e -> { 
+		  // save the file
 			if (fManager.writeToFile(fileName.getText(), outputStr)) {
 				message.appendText("\nFile saved");
 			}
@@ -121,32 +129,44 @@ public class GUI2 extends BorderPane {
 			else if (reportCbox.getValue() == null) {
 				message.appendText("\nPlease select the report type first.");
 			} else if (reportCbox.getValue().equals(options.get(0))) {
+			  //farm report
 				if (tf1.getText().length() != 0 && tf3.getText().length() != 0) {
+				  // Check if the input is missing
 					displayTable(tf1.getText(), tf2.getText(), options.get(0));
 				} else
 					message.appendText("\nPlease fill Farm ID and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(1))) {
+			  //farm report detailed
 				if (tf1.getText().length() != 0 && tf3.getText().length() != 0) {
+				  // Check if the input is missing
 					displayTable(tf1.getText(), tf2.getText(), options.get(1));
 				} else
 					message.appendText("\nPlease fill Farm ID and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(2))) {
+			  //Monthly Report
 				if (tf2.getText().length() != 0 && tf3.getText().length() != 0) {
+				  // Check if the input is missing
 					displayTable(tf2.getText(), tf3.getText(), options.get(2));
 				} else
 					message.appendText("\nPlease fill month and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(3))) {
+			  //Monthly report detailed
 				if (tf2.getText().length() != 0 && tf3.getText().length() != 0) {
+				  // Check if the input is missing
 					displayTable(tf2.getText(), tf3.getText(), options.get(3));
 				} else
 					message.appendText("\nPlease fill month and Year fields");
 			} else if (reportCbox.getValue().equals(options.get(4))) {
+			  //Annual report
 				if (tf3.getText().length() != 0) {
+				  // Check if the input is missing
 					displayTable(null, tf3.getText(), options.get(4));
 				} else
 					message.appendText("\nPlease fill Year field");
 			} else if (reportCbox.getValue().equals(options.get(5))) {
+			  //Date range report
 				if (tf4.getText().length() != 0 && tf5.getText().length() != 0) {
+				  // Check if the input is missing
 					displayTable(tf4.getText(), tf5.getText(), options.get(5));
 				} else
 					message.appendText("\nPlease fill start and end date fields");
@@ -187,9 +207,17 @@ public class GUI2 extends BorderPane {
 		this.setPadding(new Insets(0, 100, 0, 0));
 	}
 
+	/**
+	 * Methods to add the monthly information into the tableview
+	 * @param list
+	 * @param table
+	 */
 	public void month_weight_percentReport(List<Double> list, TableView table) {
+	    //refresh table each time call the meothod
 		table.refresh();
 		table.getItems().clear();
+		
+		//Initialize the three column title for the table 
 		TableColumn farm = new TableColumn("Month");
 		farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
 		TableColumn weight = new TableColumn("Total Weight");
@@ -200,29 +228,36 @@ public class GUI2 extends BorderPane {
 		table.getColumns().addAll(farm, weight, percentage);
 		outputStr += "Month, Weight, percentage\n";
 		double sum = 0;
-
+		//calculating the sum of weight for later calculating the percentage
 		for (int i = 0; i < list.size(); i++) {
 			sum = sum + list.get(i);
 		}
 		int month = 1;
 		double monthlyWeight = 0;
 		double monthlyPercentage = 0;
+		// loop through each element to get the weight and percentage
 		for (int j = 0; j < list.size(); j++) {
-			String row = "row";
-			monthlyWeight = list.get(j);
-			monthlyPercentage = monthlyWeight / sum;
+			String row = "row"; //set up the name for each object
+			monthlyWeight = list.get(j); //store the weight
+			monthlyPercentage = monthlyWeight / sum; //store the percentage
 			row = row.concat(Integer.toString(j));
 			outputStr += Integer.toString(month) + ", " + Double.toString(monthlyWeight) + ", "
 					+ Double.toString(monthlyPercentage) + "\n";
 			Row rows = new Row(Integer.toString(month), Double.toString(monthlyWeight),
 					Double.toString(monthlyPercentage));
-			table.getItems().add(rows);
-			month++;
+			table.getItems().add(rows); // add the row into the table
+			month++; // increment the month 
 		}
 		outputStr += "End of Report \n";
 	}
 
+	/**
+	 * The method to display the weight and percentage of farm
+	 * @param ds
+	 * @param table
+	 */
 	public void id_weight_percentReport(application.DS ds, TableView table) {
+	    //refresh the table each time when call the method
 		table.refresh();
 		table.getItems().clear();
 		TableColumn farm = new TableColumn("Farm Name");
