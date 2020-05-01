@@ -2,9 +2,9 @@
 
 # replace with path to your javac,java,jar,javafx installations
 JC = /usr/bin/javac     # replace with path to javac or javac.exe
-JAR = /usr/bin/jar      # replace with path to jar or jar.exe
+JAR = /Users/kyle_cj/Dropbox/UW-Madison/Eclipse/Ateam/executable.jar      # replace with path to jar or jar.exe
 JAVA = /usr/bin/java    # replace with path to java or javaw.exe
-MP = --module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml #-Dfile.encoding=UTF-8 
+MP = --module-path /Users/kyle_cj/Dropbox/UW-Madison/Eclipse/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml #-Dfile.encoding=UTF-8 
 CP = -classpath ".:application" 
 APP = application.Main
 
