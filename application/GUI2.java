@@ -1,3 +1,12 @@
+/**
+ * Title:            Milk Weight Analyzer
+ * Files:            Main.java
+ * Semester:         CS400, Spring 2020
+
+ * Authors:           Zhengzhi chen jiong chen
+ * Lecturer's Name:  Deppler
+ * Lecture Number:   001
+ */
 package application;
 
 import java.io.File;
@@ -38,6 +47,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * @author Zhengzhi chen jiong chen
+ *
+ */
 public class GUI2 extends BorderPane {
 //    FileManagerDummy fManager = new FileManagerDummy();
 	File_Manager fManager = new File_Manager();
@@ -289,6 +302,7 @@ public class GUI2 extends BorderPane {
 		// refresh the table each time when call the method
 		table.refresh();
 		table.getItems().clear();
+		//initialize three columns of the table
 		TableColumn farm = new TableColumn("Farm Name");
 		farm.setCellValueFactory(new PropertyValueFactory<>("column1"));
 		TableColumn weight = new TableColumn("Total Weight");
@@ -297,15 +311,17 @@ public class GUI2 extends BorderPane {
 		percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
 
 		outputStr += "farmID, Weight, percentage\n";
-
+		
 		table.getColumns().addAll(farm, weight, percentage);
-
+		//calculate the sum of the weight for later calculating the percentagef
 		double sum = 0;
 		for (int i = 0; i < ds.farmWeight.size(); i++) {
 			sum = sum + ds.farmWeight.get(i);
 		}
 		double monthlyWeight = 0;
 		double monthlyPercentage = 0;
+		// loop to store each element from the farmweight and calculate the percentage
+		// create each row and add to the table
 		for (int j = 0; j < ds.farmWeight.size(); j++) {
 			monthlyWeight = ds.farmWeight.get(j);
 			monthlyPercentage = monthlyWeight / sum;
@@ -318,6 +334,7 @@ public class GUI2 extends BorderPane {
 	}
 
 	/**
+	 * method to get min, average and max for specific farm
 	 * assuming all double listed from month 1 to 12 sorted
 	 *
 	 * @param id
@@ -325,10 +342,11 @@ public class GUI2 extends BorderPane {
 	 * @param table
 	 */
 	public void month_min_ave_maxReport(String id, String year, TableView table) {
+	  //get the min, average and max from the data file
 		List<Double> min = dManager.getMonthlyMinForFarm(id, year);
 		List<Double> ave = dManager.getMonthlyAverageForFarm(id, year);
 		List<Double> max = dManager.getMonthlyMaxForFarm(id, year);
-
+		// set up the four column in the tableview 
 		TableColumn month = new TableColumn("Month");
 		month.setCellValueFactory(new PropertyValueFactory<>("column1"));
 		TableColumn minCol = new TableColumn("Min");
@@ -338,7 +356,7 @@ public class GUI2 extends BorderPane {
 		TableColumn maxCol = new TableColumn("Max");
 		maxCol.setCellValueFactory(new PropertyValueFactory<>("column4"));
 		table.getColumns().addAll(month, minCol, aveCol, maxCol);
-
+		// loop to add each element into row
 		for (int i = 0; i < min.size(); i++) {
 			four_col_Row rows = new four_col_Row(Integer.toString(i + 1), Double.toString(min.get(i)),
 					Double.toString(ave.get(i)), Double.toString(max.get(i)));
@@ -346,11 +364,19 @@ public class GUI2 extends BorderPane {
 		}
 	}
 
+	/**
+	 * Method to report all farms's min, average and max in a month
+	 * @param month
+	 * @param year
+	 * @param table
+	 */
 	public void id_min_ave_maxReport(String month, String year, TableView table) {
+	  //retrieve data of min, average and max
 		DS min = dManager.getMonthlyMin(month, year);
 		DS ave = dManager.getMonthlyAverage(month, year);
 		DS max = dManager.getMonthlyMax(month, year);
-
+		
+		// setup four columns for month, min, average and max
 		TableColumn farmID = new TableColumn("Month");
 		farmID.setCellValueFactory(new PropertyValueFactory<>("column1"));
 		TableColumn minCol = new TableColumn("Min");
@@ -360,7 +386,8 @@ public class GUI2 extends BorderPane {
 		TableColumn maxCol = new TableColumn("Max");
 		maxCol.setCellValueFactory(new PropertyValueFactory<>("column4"));
 		table.getColumns().addAll(farmID, minCol, aveCol, maxCol);
-
+		
+		// loop to add each element into the row
 		for (int i = 0; i < min.farmNames.size(); i++) {
 			four_col_Row rows = new four_col_Row(min.farmNames.get(i), Double.toString(min.farmWeight.get(i)),
 					Double.toString(ave.farmWeight.get(i)), Double.toString(max.farmWeight.get(i)));
@@ -368,14 +395,23 @@ public class GUI2 extends BorderPane {
 		}
 	}
 
+	/**
+	 * Method to display the report tableview
+	 * @param param1
+	 * @param param2
+	 * @param option
+	 */
 	public void displayTable(String param1, String param2, String option) {
+	  //create new stage
 		Stage pop = new Stage();
 		pop.initModality(Modality.APPLICATION_MODAL);
 		Button closeBtn = new Button("Close");
 		closeBtn.setOnAction(e -> pop.close());
-
+		// create new tableview to pass into the method
 		TableView table = new TableView();
 		
+		//check the user selected which report
+		//call the correspondint reporting method
 		if (option.equals("Farm Report")) {
 			outputStr += "\n-Farm Report for " + param1 + " " + param2 + "\n";
 			month_weight_percentReport(dManager.getFarmReport(param1, param2), table);
@@ -401,7 +437,8 @@ public class GUI2 extends BorderPane {
 		} else {
 			message.appendText("Unknown report type requested when dispay");
 		}
-
+		
+		// add the table into the pane and add to popup window
 		BorderPane root = new BorderPane();
 		root.setCenter(table);
 		Scene popup = new Scene(root, 500, 300);
@@ -409,6 +446,11 @@ public class GUI2 extends BorderPane {
 		pop.showAndWait();
 	}
 
+	/** 
+	 * The class for tableview that contain three columns
+	 * @author Zhengzhi chen jiong chen
+	 *
+	 */
 	public class Row {
 		private final String column1;
 		private final String column2;
@@ -433,6 +475,11 @@ public class GUI2 extends BorderPane {
 		}
 	}
 
+	/**
+	 * The class for tableview that contain four columns
+	 * @author Zhengzhi chen jiong chen
+	 *
+	 */
 	public class four_col_Row {
 		private final String column1;
 		private final String column2;
