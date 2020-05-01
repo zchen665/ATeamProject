@@ -141,6 +141,7 @@ public class GUI2 extends BorderPane {
 		// report.//////////////////////////////////////////////////////
 		// note!!!!!!!!!!need to throw exceptions for incorrect text input
 		submitBtn.setOnAction(e -> {
+			try {
 			if (dManager == null)
 				message.appendText("\nPlease load data first.");
 			else if (reportCbox.getValue() == null) {
@@ -187,6 +188,9 @@ public class GUI2 extends BorderPane {
 					displayTable(tf4.getText(), tf5.getText(), options.get(5));
 				} else
 					message.appendText("\nPlease fill start and end date fields");
+			}
+			}catch (IllegalArgumentException e1) {
+				message.appendText("\n" + e1.getMessage());
 			}
 		});
 
@@ -371,7 +375,7 @@ public class GUI2 extends BorderPane {
 		closeBtn.setOnAction(e -> pop.close());
 
 		TableView table = new TableView();
-
+		
 		if (option.equals("Farm Report")) {
 			outputStr += "\n-Farm Report for " + param1 + " " + param2 + "\n";
 			month_weight_percentReport(dManager.getFarmReport(param1, param2), table);
