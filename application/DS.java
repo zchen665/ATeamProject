@@ -5,7 +5,7 @@ import java.util.*;
 public class DS {
     public List<String> farmNames;//leave empty if no such data
     public List<Double> farmWeight;
-    public List<String> month; //leave empty if no such data
+    public List<String> dates; //leave empty if no such data
     public Map<String, List<ReportForTheDay>> farmReportDaily;
     public Map<String, List<ReportForTheFarm>> dailyReportForTheFarms;
 
@@ -15,6 +15,7 @@ public class DS {
     public DS() {
         farmNames = new ArrayList<>();
         farmWeight = new ArrayList<>();
+        dates = new ArrayList<>();
         farmReportDaily = new HashMap<>(); //Farm-Based Report for each day
         dailyReportForTheFarms = new HashMap<>(); //Daily Report for each farm
     }
@@ -30,6 +31,9 @@ public class DS {
         if (!farmReportDaily.containsKey(farmName)) {
             if (!farmNames.contains(farmName)) {
                 farmNames.add(farmName);
+            }
+            if (!dates.contains(date)) {
+                dates.add(date);
             }
             List<ReportForTheDay> reports = new LinkedList<>();
             farmReportDaily.put(farmName, reports);
@@ -61,6 +65,9 @@ public class DS {
         if (!dailyReportForTheFarms.containsKey(date)) {
             if (!farmNames.contains(farmName)) {
                 farmNames.add(farmName);
+            }
+            if (!dates.contains(date)) {
+                dates.add(date);
             }
             List<ReportForTheFarm> reports = new LinkedList<>();
             dailyReportForTheFarms.put(date, reports);
