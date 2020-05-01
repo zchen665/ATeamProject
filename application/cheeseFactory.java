@@ -1,5 +1,8 @@
 package application;
+<<<<<<< HEAD
+=======
 
+>>>>>>> d931a683f758de294d6d3b305167283b3fad7348
 import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
 
