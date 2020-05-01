@@ -1,0 +1,15 @@
+null
+-Annual Report for 2019
+farmID, Weight, percentage
+Farm 0, 2066326.0, 0.35534356008735324
+Farm 1, 2675858.0, 0.46016403413992996
+Farm 2, 1072825.0, 0.18449240577271678
+End of Report
+
+-Monthly Report for 1 2019
+farmID, Weight, percentage
+Farm 0, 2066326.0, 0.35534356008735324
+Farm 1, 2675858.0, 0.46016403413992996
+Farm 2, 1072825.0, 0.18449240577271678
+End of Report
+
