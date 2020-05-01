@@ -158,7 +158,6 @@ public class DataManager {
             }
             list.set(i, current);
         }
-        System.out.println(list.toString());
         return list;
     }
 

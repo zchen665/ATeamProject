@@ -15,15 +15,13 @@ public class File_Manager {
 	List<File> files = new LinkedList<>(); // All files in a particular folder
 	static cheeseFactory cf = new cheeseFactory();
 
-	boolean writeToFile(String outputFile) {
-		System.out.println("Call writeTofile in fManager");
+	boolean writeToFile(String fileName, String strToWrite) {
 		try {
-			pw = new PrintWriter(new File("results.csv"));
-			pw.println(outputFile);
+			pw = new PrintWriter(new File(fileName + ".txt"));
+			pw.println(strToWrite);
 			pw.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}

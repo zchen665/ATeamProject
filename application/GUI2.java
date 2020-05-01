@@ -41,6 +41,7 @@ public class GUI2 extends BorderPane {
 //    FileManagerDummy fManager = new FileManagerDummy();
 	File_Manager fManager = new File_Manager();
 	DataManager dManager;
+	String outputStr = "";
 
 	File file;
 	ListView<String> listView;
@@ -100,14 +101,14 @@ public class GUI2 extends BorderPane {
 			try {
 				File_Manager.enlistAllFiles(new Stage(), fileList, listView, list);
 				dManager = new DataManager(File_Manager.cf);
+				message.appendText("\nFile read");
 			} catch (NumberFormatException e1) {
-				message.appendText("Error reading file");
+				message.appendText("\n!!!Error reading file!!!");
 			}
-			message.appendText("\nFile read");
 		});
 
 		saveFile.setOnAction(e -> {
-			if (fManager.writeToFile(fileName.getText())) {
+			if (fManager.writeToFile(fileName.getText(), outputStr)) {
 				message.appendText("\nFile saved");
 			}
 		});
@@ -197,7 +198,7 @@ public class GUI2 extends BorderPane {
 		percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
 
 		table.getColumns().addAll(farm, weight, percentage);
-
+		outputStr += "Month, Weight, percentage\n";
 		double sum = 0;
 
 		for (int i = 0; i < list.size(); i++) {
@@ -211,12 +212,14 @@ public class GUI2 extends BorderPane {
 			monthlyWeight = list.get(j);
 			monthlyPercentage = monthlyWeight / sum;
 			row = row.concat(Integer.toString(j));
-
+			outputStr += Integer.toString(month) + ", " + Double.toString(monthlyWeight) + ", "
+					+ Double.toString(monthlyPercentage) + "\n";
 			Row rows = new Row(Integer.toString(month), Double.toString(monthlyWeight),
 					Double.toString(monthlyPercentage));
 			table.getItems().add(rows);
 			month++;
 		}
+		outputStr += "End of Report \n";
 	}
 
 	public void id_weight_percentReport(application.DS ds, TableView table) {
@@ -229,6 +232,8 @@ public class GUI2 extends BorderPane {
 		TableColumn percentage = new TableColumn("Percentage");
 		percentage.setCellValueFactory(new PropertyValueFactory<>("column3"));
 
+		outputStr += "farmID, Weight, percentage\n";
+
 		table.getColumns().addAll(farm, weight, percentage);
 
 		double sum = 0;
@@ -240,9 +245,12 @@ public class GUI2 extends BorderPane {
 		for (int j = 0; j < ds.farmWeight.size(); j++) {
 			monthlyWeight = ds.farmWeight.get(j);
 			monthlyPercentage = monthlyWeight / sum;
+			outputStr += ds.farmNames.get(j) + ", " + Double.toString(monthlyWeight) + ", "
+					+ Double.toString(monthlyPercentage) +"\n";
 			Row rows = new Row(ds.farmNames.get(j), Double.toString(monthlyWeight), Double.toString(monthlyPercentage));
 			table.getItems().add(rows);
 		}
+		outputStr += "End of Report\n";
 	}
 
 	/**
@@ -305,21 +313,25 @@ public class GUI2 extends BorderPane {
 		TableView table = new TableView();
 
 		if (option.equals("Farm Report")) {
+			outputStr += "\n-Farm Report for " + param1 + " " + param2 + "\n";
 			month_weight_percentReport(dManager.getFarmReport(param1, param2), table);
 			pop.setTitle("Farm Report");
 		} else if (option.equals("Farm Report(detailed)")) {
 			month_min_ave_maxReport(param1, param2, table);
 			pop.setTitle("Farm Report(detailed)");
 		} else if (option.equals("Monthly Report")) {
+			outputStr += "\n-Monthly Report for " + param1 + " " + param2+ "\n";
 			id_weight_percentReport(dManager.getMonthlyReport(param1, param2), table);
 			pop.setTitle("Monthly Report");
 		} else if (option.equals("Monthly Report(detailed)")) {
 			id_min_ave_maxReport(param1, param2, table);
 			pop.setTitle("Monthly Report(detailed)");
 		} else if (option.equals("Annual Report")) {
+			outputStr += "\n-Annual Report for " + param2+ "\n";
 			id_weight_percentReport(dManager.getAnnual(param2), table);
 			pop.setTitle("Annual Report");
 		} else if (option.equals("Date Range Report")) {
+			outputStr += "\n-Date Range Report for " + param1 + " to " + param2 + "\n";
 			id_weight_percentReport(dManager.getTotalInDateRange(param1, param2), table);
 			pop.setTitle("Date Range Report");
 		} else {
