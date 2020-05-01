@@ -63,6 +63,8 @@ public class DataManager {
     }
 
     /**
+     * For a specific month in a year, derive the number of days it contains
+     *
      * @param month
      * @param year
      * @return
@@ -79,8 +81,7 @@ public class DataManager {
         calendar.set(Calendar.DATE, 1);
         calendar.roll(Calendar.DATE, -1);
 
-        int maxDays = calendar.get(Calendar.DATE);
-        return maxDays;
+        return calendar.get(Calendar.DATE);
     }
 
     /**
@@ -105,7 +106,7 @@ public class DataManager {
             }
             double min = dailyReportsForTheMonth.get(0);
             for (Double d : dailyReportsForTheMonth) {
-                if (min >= d) {
+                if (min > d) {
                     min = d;
                 }
             }
@@ -136,7 +137,7 @@ public class DataManager {
             }
             double max = dailyReportsForTheMonth.get(0);
             for (Double d : dailyReportsForTheMonth) {
-                if (max <= d) {
+                if (max < d) {
                     max = d;
                 }
             }
@@ -224,7 +225,7 @@ public class DataManager {
             int days = getDaysForTheMonth(Integer.toString(month), year);
             list.set(i, tmpList.get(i) / days);
         }
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**
@@ -234,8 +235,6 @@ public class DataManager {
      * @param year
      * @return
      */
-    //get monthlymin returns a list of information on min daily milk in each month for
-    //that farm requested.
     public List<Double> getMonthlyMinForFarm(String farmName, String year) {
         clear(list);
         for (int i = 0; i < list.size(); i++) {
@@ -249,7 +248,8 @@ public class DataManager {
             }
             list.set(i, min);
         }
-        return list;
+        System.out.println(list.toString());
+        return new ArrayList<>(list);
     }
 
     /**
@@ -290,7 +290,7 @@ public class DataManager {
             }
             list.set(i, max);
         }
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**
