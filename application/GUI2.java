@@ -136,7 +136,9 @@ public class GUI2 extends BorderPane {
 					message.appendText("\nFile read");
 				}
 			} catch (NumberFormatException e1) {
-				message.appendText("\n!!!Error reading file!!!");
+				message.appendText("\n!!!Error reading file!!!\nClear Data if continue");
+			} catch (Exception e2) {
+				message.appendText("\n uknown Exception has occured:(!");
 			}
 
 			fileName.setPromptText("Output File Name Here");
@@ -204,12 +206,19 @@ public class GUI2 extends BorderPane {
 			}
 			}catch (IllegalArgumentException e1) {
 				message.appendText("\n" + e1.getMessage());
-			}
+			}catch (NullPointerException e2) {
+				message.appendText("\ninvalid input> <!");
+			}catch (IndexOutOfBoundsException e3){
+				message.appendText("\ninvalid input> <!");
+			}catch (Exception e4) {
+				message.appendText("\nUnknown ERROR:<");
+		}
 		});
 
 		clearData.setOnAction(e -> {
 			dManager = null;
 			outputStr = null;
+			message.appendText("\nData cleared.");
 		});
 
 		// hbox to add load/save bottons
@@ -377,7 +386,7 @@ public class GUI2 extends BorderPane {
 		DS max = dManager.getMonthlyMax(month, year);
 		
 		// setup four columns for month, min, average and max
-		TableColumn farmID = new TableColumn("Month");
+		TableColumn farmID = new TableColumn("FarmID");
 		farmID.setCellValueFactory(new PropertyValueFactory<>("column1"));
 		TableColumn minCol = new TableColumn("Min");
 		minCol.setCellValueFactory(new PropertyValueFactory<>("column2"));
