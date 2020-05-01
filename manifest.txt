@@ -1,5 +1,5 @@
 Manifest-Version: 2.0
-Created-By: Jiahe Wang
-Class-Path: \path\to\javafx-sdk-11\lib
+Created-By: Jiong Chen
+Class-Path: /Users/kyle_cj/Dropbox/UW-Madison/Eclipse/javafx-sdk-11.0.2/lib
 Main-Class: application.Main
 
