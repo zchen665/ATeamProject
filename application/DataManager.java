@@ -39,7 +39,7 @@ public class DataManager {
      *
      * @param month
      * @param year
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     public DS getMonthlyAverage(String month, String year) {
         int days = getDaysForTheMonth(month, year);
@@ -71,7 +71,7 @@ public class DataManager {
      *
      * @param month
      * @param year
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     private int getDaysForTheMonth(String month, String year) {
 
@@ -93,7 +93,7 @@ public class DataManager {
      *
      * @param month
      * @param year
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     public DS getMonthlyMin(String month, String year) {
         ds.farmWeight.clear();
@@ -128,7 +128,7 @@ public class DataManager {
      *
      * @param month
      * @param year
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     public DS getMonthlyMax(String month, String year) {
         ds.farmWeight.clear();
@@ -159,9 +159,11 @@ public class DataManager {
     }
 
     /**
+     * Gets the monthly production for each farm for a specific month
+     *
      * @param month
      * @param year
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     public DS getMonthlyReport(String month, String year) {
         ds.farmWeight.clear();
@@ -194,7 +196,7 @@ public class DataManager {
      *
      * @param farmName
      * @param year
-     * @return
+     * @return The list of total productions for each month
      */
     public List<Double> getFarmReport(String farmName, String year) {
         if (!ds.farmNames.contains(farmName)) {
@@ -232,7 +234,7 @@ public class DataManager {
      *
      * @param farmName
      * @param year
-     * @return
+     * @return The list of average productions for each month
      */
     public List<Double> getMonthlyAverageForFarm(String farmName, String year) {
         clear(list);
@@ -254,7 +256,7 @@ public class DataManager {
      *
      * @param farmName
      * @param year
-     * @return
+     * @return The list of minimum productions for each month
      */
     public List<Double> getMonthlyMinForFarm(String farmName, String year) {
         clear(list);
@@ -288,7 +290,7 @@ public class DataManager {
      *
      * @param farmName
      * @param year
-     * @return
+     * @return The list of maximum productions for each month
      */
     public List<Double> getMonthlyMaxForFarm(String farmName, String year) {
         clear(list);
@@ -321,7 +323,7 @@ public class DataManager {
      * Get the annual report for all farms
      *
      * @param year
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     public DS getAnnual(String year) {
         ds.farmWeight.clear();
@@ -342,7 +344,7 @@ public class DataManager {
      *
      * @param farmName
      * @param year
-     * @return
+     * @return The list of total productions for each farm
      */
     private List<Double> getAnnualForFarm(String farmName, String year) {
         if (!ds.farmNames.contains(farmName)) {
@@ -365,7 +367,7 @@ public class DataManager {
      *
      * @param startDate
      * @param endDate
-     * @return
+     * @return The modified auxiliary data structure for displaying
      */
     public DS getTotalInDateRange(String startDate, String endDate) {
         ds.farmWeight.clear();
@@ -395,7 +397,7 @@ public class DataManager {
      * @param startDate
      * @param endDate
      * @param farmName
-     * @return
+     * @return The list of productions of the farm in the period
      */
     private List<Double> getSpecifiedRangeReportForFarm(String startDate, String endDate, String farmName) {
         if (!ds.farmNames.contains(farmName)) {
