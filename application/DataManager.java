@@ -43,6 +43,10 @@ public class DataManager {
      */
     public DS getMonthlyAverage(String month, String year) {
         int days = getDaysForTheMonth(month, year);
+        String tempDate = String.join("-", year, month, "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
@@ -94,6 +98,10 @@ public class DataManager {
     public DS getMonthlyMin(String month, String year) {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
+        String tempDate = String.join("-", year, month, "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
@@ -125,6 +133,10 @@ public class DataManager {
     public DS getMonthlyMax(String month, String year) {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
+        String tempDate = String.join("-", year, month, "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
@@ -154,6 +166,10 @@ public class DataManager {
     public DS getMonthlyReport(String month, String year) {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
+        String tempDate = String.join("-", year, month, "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
@@ -181,10 +197,15 @@ public class DataManager {
      * @return
      */
     public List<Double> getFarmReport(String farmName, String year) {
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
+        String tempDate = String.join("-", year, "01", "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         clear(list);
         List<DS.ReportForTheDay> reports = ds.farmReportDaily.get(farmName);
-        System.out.println(reports.toString());
-        System.out.println(reports.size());
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
             Double current = list.get(i);
@@ -219,7 +240,15 @@ public class DataManager {
      */
     public List<Double> getMonthlyAverageForFarm(String farmName, String year) {
         clear(list);
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
+        String tempDate = String.join("-", year, "01", "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         List<Double> tmpList = new ArrayList<>(getFarmReport(farmName, year));
+        System.out.println(tmpList.toString());
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
             int days = getDaysForTheMonth(Integer.toString(month), year);
@@ -237,18 +266,32 @@ public class DataManager {
      */
     public List<Double> getMonthlyMinForFarm(String farmName, String year) {
         clear(list);
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
+        String tempDate = String.join("-", year, "01", "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
-            List<Double> monthlyReport = new ArrayList<>(getMonthlyFarmReport(farmName, year, month));
-            double min = monthlyReport.get(0);
-            for (double d : monthlyReport) {
-                if (min >= d) {
+            List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
+            for (DS.ReportForTheDay reportForTheDay : DailyReports) {
+                String date = reportForTheDay.date;
+                if ((date.contains(year) && date.contains("-0" + month + "-"))
+                        || (date.contains(year) && date.contains("-" + month + "-"))) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double min = dailyReportsForTheMonth.get(0);
+            for (Double d : dailyReportsForTheMonth) {
+                if (min > d) {
                     min = d;
                 }
             }
             list.set(i, min);
         }
-        System.out.println(list.toString());
         return new ArrayList<>(list);
     }
 
@@ -259,6 +302,13 @@ public class DataManager {
      * @return
      */
     private List<Double> getMonthlyFarmReport(String farmName, String year, int month) {
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
+        String tempDate = String.join("-", year, Integer.toString(month), "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         List<Double> reportForTheMonth = new ArrayList<>();
         List<DS.ReportForTheDay> completeFarmReport = ds.farmReportDaily.get(farmName);
         for (DS.ReportForTheDay report : completeFarmReport) {
@@ -279,12 +329,27 @@ public class DataManager {
      */
     public List<Double> getMonthlyMaxForFarm(String farmName, String year) {
         clear(list);
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
+        String tempDate = String.join("-", year, "01", "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
-            List<Double> monthlyReport = new ArrayList<>(getMonthlyFarmReport(farmName, year, month));
-            double max = monthlyReport.get(0);
-            for (double d : monthlyReport) {
-                if (max <= d) {
+            List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
+            for (DS.ReportForTheDay reportForTheDay : DailyReports) {
+                String date = reportForTheDay.date;
+                if ((date.contains(year) && date.contains("-0" + month + "-"))
+                        || (date.contains(year) && date.contains("-" + month + "-"))) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double max = dailyReportsForTheMonth.get(0);
+            for (Double d : dailyReportsForTheMonth) {
+                if (max < d) {
                     max = d;
                 }
             }
@@ -302,6 +367,10 @@ public class DataManager {
     public DS getAnnual(String year) {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
+        String tempDate = String.join("-", year, "01", "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         for (String farmName : ds.farmNames) {
             Double sum = 0.0;
             List<Double> weightReportForTheYear = getAnnualForFarm(farmName, year);
@@ -321,6 +390,13 @@ public class DataManager {
      * @return
      */
     private List<Double> getAnnualForFarm(String farmName, String year) {
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
+        String tempDate = String.join("-", year, "01", "01");
+        if (!ds.dates.contains(tempDate)) {
+            throw new IllegalArgumentException("Invalid Month or Year!");
+        }
         List<DS.ReportForTheDay> reports = ds.farmReportDaily.get(farmName);
         List<Double> reportForTheYear = new ArrayList<>();
         for (DS.ReportForTheDay report : reports) {
@@ -340,8 +416,6 @@ public class DataManager {
      * @param endDate
      * @return
      */
-    //changed from average to total based on the specification
-    // sort by total milk weight over the data range
     public DS getTotalInDateRange(String startDate, String endDate) {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
@@ -373,6 +447,9 @@ public class DataManager {
      * @return
      */
     private List<Double> getSpecifiedRangeReportForFarm(String startDate, String endDate, String farmName) {
+        if (!ds.farmNames.contains(farmName)) {
+            throw new IllegalArgumentException("Invalid Farm Name!");
+        }
         List<DS.ReportForTheDay> reports = ds.farmReportDaily.get(farmName);
         List<Double> reportForTheYear = new ArrayList<>();
         for (DS.ReportForTheDay report : reports) {
