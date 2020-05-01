@@ -83,13 +83,17 @@ public class DataManager {
         Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
-            double min = DailyReports.get(0).weight;
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
             for (DS.ReportForTheDay reportForTheDay : DailyReports) {
                 String date = reportForTheDay.date;
-                if (date.contains(month) && date.contains(year)) {
-                    if (min >= reportForTheDay.weight) {
-                        min = reportForTheDay.weight;
-                    }
+                if (date.contains("-" + month + "-") && date.contains(year)) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double min = dailyReportsForTheMonth.get(0);
+            for (Double d : dailyReportsForTheMonth) {
+                if (min >= d) {
+                    min = d;
                 }
             }
             ds.farmWeight.add(min);
@@ -107,13 +111,17 @@ public class DataManager {
         Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
             List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
-            double max = DailyReports.get(0).weight;
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
             for (DS.ReportForTheDay reportForTheDay : DailyReports) {
                 String date = reportForTheDay.date;
-                if (date.contains(month) && date.contains(year)) {
-                    if (max <= reportForTheDay.weight) {
-                        max = reportForTheDay.weight;
-                    }
+                if (date.contains("-" + month + "-") && date.contains(year)) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double max = dailyReportsForTheMonth.get(0);
+            for (Double d : dailyReportsForTheMonth) {
+                if (max <= d) {
+                    max = d;
                 }
             }
             ds.farmWeight.add(max);
@@ -130,8 +138,19 @@ public class DataManager {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
         for (String farmName : ds.farmNames) {
-            double total = cf.getSumFarm(farmName);
-            ds.farmWeight.add(total);
+            List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
+            for (DS.ReportForTheDay reportForTheDay : DailyReports) {
+                String date = reportForTheDay.date;
+                if (date.contains("-" + month + "-") && date.contains(year)) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double sum = 0.0;
+            for (Double d : dailyReportsForTheMonth) {
+                sum += d;
+            }
+            ds.farmWeight.add(sum);
         }
         return ds;
     }

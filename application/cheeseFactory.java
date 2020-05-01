@@ -271,6 +271,9 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
                         day = -1;
                         throw new NumberFormatException();
                     }
+                    catch (ArrayIndexOutOfBoundsException e) {
+                        
+                    } 
                 }
             }
 
