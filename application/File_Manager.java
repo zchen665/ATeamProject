@@ -58,7 +58,7 @@ public class File_Manager {
 		} catch (NullPointerException e) {
 			return false;
 		}
-		// System.out.println(list);
+		
 		listView.setItems(list);
 		ArrayList<ArrayList<String>> allData = CSV2Array(list.get(0));
 		for (int i = 1; i < list.size(); i++) {
@@ -70,7 +70,6 @@ public class File_Manager {
 			if (!allData.get(i).get(0).contains("date"))
 				dates.add(allData.get(i).get(0));
 		}
-		// System.out.println(dates);
 
 		ArrayList<String> ids = new ArrayList<String>();
 		for (int i = 0; i < allData.size(); i++) {
@@ -117,6 +116,3 @@ public class File_Manager {
 	}
 
 }
-
-//Don't know if needed
-//String getFileContents(String fileName);
