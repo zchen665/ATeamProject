@@ -4,19 +4,20 @@ import java.util.*;
 
 /**
  * Defines operation on data manipulations and forming the required data for the visualizer
+ *
+ * @author Jitian Liu
  */
 public class DataManager {
 
     private final DS ds = new DS();
-    private final cheeseFactory<String, Double> cf;
-
     private final ArrayList<Double> list = new ArrayList<>(Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 
     /**
-     * @param cf
+     * Set up the DataManager, given a repository of farms, namely, the cheese factory
+     *
+     * @param cf the cheese factory to be analyzed
      */
     public DataManager(cheeseFactory<String, Double> cf) {
-        this.cf = cf;
         String[][] allData = cf.getAllData();
         for (int i = 0; i < allData.length; i++) {
             ds.addFarmReportForTheDay(allData[i][1], allData[i][0], allData[i][2]);
@@ -43,14 +44,27 @@ public class DataManager {
     public DS getMonthlyAverage(String month, String year) {
         int days = getDaysForTheMonth(month, year);
         for (String farmName : ds.farmNames) {
-            double total = cf.getSumFarm(farmName);
-            double avg = total / days;
-            ds.farmWeight.add(avg);
+            List<DS.ReportForTheDay> DailyReports = ds.farmReportDaily.get(farmName);
+            List<Double> dailyReportsForTheMonth = new ArrayList<>();
+            for (DS.ReportForTheDay reportForTheDay : DailyReports) {
+                String date = reportForTheDay.date;
+                if ((date.contains(year) && date.contains("-0" + month + "-"))
+                        || (date.contains(year) && date.contains("-" + month + "-"))) {
+                    dailyReportsForTheMonth.add(reportForTheDay.weight);
+                }
+            }
+            double sum = 0.0;
+            for (Double d : dailyReportsForTheMonth) {
+                sum += d;
+            }
+            ds.farmWeight.add(sum / days);
         }
         return ds;
     }
 
     /**
+     * For a specific month in a year, derive the number of days it contains
+     *
      * @param month
      * @param year
      * @return
@@ -67,17 +81,16 @@ public class DataManager {
         calendar.set(Calendar.DATE, 1);
         calendar.roll(Calendar.DATE, -1);
 
-        int maxDays = calendar.get(Calendar.DATE);
-        return maxDays;
+        return calendar.get(Calendar.DATE);
     }
 
     /**
+     * Returns a list of information on min daily milk weight in that month for each farm
+     *
      * @param month
      * @param year
      * @return
      */
-    //get monthlymin returns a list of information on min daily milk weight
-    //in that month for each farm
     public DS getMonthlyMin(String month, String year) {
         ds.farmWeight.clear();
         Collections.sort(ds.farmNames);
@@ -86,13 +99,14 @@ public class DataManager {
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
             for (DS.ReportForTheDay reportForTheDay : DailyReports) {
                 String date = reportForTheDay.date;
-                if (date.contains("-" + month + "-") && date.contains(year)) {
+                if ((date.contains(year) && date.contains("-0" + month + "-"))
+                        || (date.contains(year) && date.contains("-" + month + "-"))) {
                     dailyReportsForTheMonth.add(reportForTheDay.weight);
                 }
             }
             double min = dailyReportsForTheMonth.get(0);
             for (Double d : dailyReportsForTheMonth) {
-                if (min >= d) {
+                if (min > d) {
                     min = d;
                 }
             }
@@ -102,6 +116,8 @@ public class DataManager {
     }
 
     /**
+     * Returns a list of information on max daily milk weight in that month for each farm
+     *
      * @param month
      * @param year
      * @return
@@ -114,13 +130,14 @@ public class DataManager {
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
             for (DS.ReportForTheDay reportForTheDay : DailyReports) {
                 String date = reportForTheDay.date;
-                if (date.contains("-" + month + "-") && date.contains(year)) {
+                if ((date.contains(year) && date.contains("-0" + month + "-"))
+                        || (date.contains(year) && date.contains("-" + month + "-"))) {
                     dailyReportsForTheMonth.add(reportForTheDay.weight);
                 }
             }
             double max = dailyReportsForTheMonth.get(0);
             for (Double d : dailyReportsForTheMonth) {
-                if (max <= d) {
+                if (max < d) {
                     max = d;
                 }
             }
@@ -142,7 +159,8 @@ public class DataManager {
             List<Double> dailyReportsForTheMonth = new ArrayList<>();
             for (DS.ReportForTheDay reportForTheDay : DailyReports) {
                 String date = reportForTheDay.date;
-                if (date.contains("-" + month + "-") && date.contains(year)) {
+                if ((date.contains(year) && date.contains("-0" + month + "-"))
+                        || (date.contains(year) && date.contains("-" + month + "-"))) {
                     dailyReportsForTheMonth.add(reportForTheDay.weight);
                 }
             }
@@ -171,7 +189,8 @@ public class DataManager {
             int month = i + 1;
             Double current = list.get(i);
             for (DS.ReportForTheDay report : reports) {
-                if (report.date.contains(year) && report.date.contains("-" + month + "-")) {
+                if ((report.date.contains(year) && report.date.contains("-0" + month + "-"))
+                        || (report.date.contains(year) && report.date.contains("-" + month + "-"))) {
                     current += report.weight;
                 }
             }
@@ -192,6 +211,8 @@ public class DataManager {
     }
 
     /**
+     * For a specific farm get the average production over each month in a year
+     *
      * @param farmName
      * @param year
      * @return
@@ -204,21 +225,21 @@ public class DataManager {
             int days = getDaysForTheMonth(Integer.toString(month), year);
             list.set(i, tmpList.get(i) / days);
         }
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**
+     * For a specific farm get the minimum production for each month in a year
+     *
      * @param farmName
      * @param year
      * @return
      */
-    //get monthlymin returns a list of information on min daily milk in each month for
-    //that farm requested.
     public List<Double> getMonthlyMinForFarm(String farmName, String year) {
         clear(list);
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
-            List<Double> monthlyReport = getMonthlyFarmReport(farmName, year, month);
+            List<Double> monthlyReport = new ArrayList<>(getMonthlyFarmReport(farmName, year, month));
             double min = monthlyReport.get(0);
             for (double d : monthlyReport) {
                 if (min >= d) {
@@ -227,7 +248,8 @@ public class DataManager {
             }
             list.set(i, min);
         }
-        return list;
+        System.out.println(list.toString());
+        return new ArrayList<>(list);
     }
 
     /**
@@ -240,18 +262,26 @@ public class DataManager {
         List<Double> reportForTheMonth = new ArrayList<>();
         List<DS.ReportForTheDay> completeFarmReport = ds.farmReportDaily.get(farmName);
         for (DS.ReportForTheDay report : completeFarmReport) {
-            if (report.date.contains(year) && report.date.contains("-" + month + "-")) {
+            if ((report.date.contains(year) && report.date.contains("-0" + month + "-"))
+                    || (report.date.contains(year) && report.date.contains("-" + month + "-"))) {
                 reportForTheMonth.add(report.weight);
             }
         }
         return reportForTheMonth;
     }
 
+    /**
+     * For a specific farm get the maximum production for each month in a year
+     *
+     * @param farmName
+     * @param year
+     * @return
+     */
     public List<Double> getMonthlyMaxForFarm(String farmName, String year) {
         clear(list);
         for (int i = 0; i < list.size(); i++) {
             int month = i + 1;
-            List<Double> monthlyReport = getMonthlyFarmReport(farmName, year, month);
+            List<Double> monthlyReport = new ArrayList<>(getMonthlyFarmReport(farmName, year, month));
             double max = monthlyReport.get(0);
             for (double d : monthlyReport) {
                 if (max <= d) {
@@ -260,18 +290,12 @@ public class DataManager {
             }
             list.set(i, max);
         }
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**
-     * @return
-     */
-    public List<Double> getDataSortedByField() {
-        // TODO: Aborted
-        return null;
-    }
-
-    /**
+     * Get the annual report for all farms
+     *
      * @param year
      * @return
      */
@@ -290,6 +314,8 @@ public class DataManager {
     }
 
     /**
+     * Collect the data of production for a specific farm in a specific year
+     *
      * @param farmName
      * @param year
      * @return
@@ -339,6 +365,8 @@ public class DataManager {
     }
 
     /**
+     * Collect the data of production for a specific range of date in a specific year
+     *
      * @param startDate
      * @param endDate
      * @param farmName
