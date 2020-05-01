@@ -1,5 +1,3 @@
-package application;
-
 import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
 
@@ -9,7 +7,7 @@ import java.util.regex.PatternSyntaxException;
  * @author Jiahe Wang
  */
 public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, V> {
-    // global list that will record all the data of each farm
+    //private global list that will record all the data of each farm
     private final ArrayList<farm> factory = new ArrayList<>();
 
     @Override
@@ -225,9 +223,9 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
 
         //the default constructor. Should never be called.
         public farm() {
-            farmID = "Dummy";
-            date = "Dummy";
-            weightStr = "Dummy";
+            farmID = "missing";
+            date = "missing";
+            weightStr = "missing";
         }
 
         //constructor that records all information and make sure in correct format
@@ -264,12 +262,16 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
                         year = Integer.parseInt(temp[0]);
                         month = Integer.parseInt(temp[1]);
                         day = Integer.parseInt(temp[2]);
+                        if(temp[1].length() < 2) {
+                        	temp[1] = "0" + temp[1];
+                        	this.date = temp[0] + "-" + temp[1] + "-" + temp[2];
+                        }
                     } catch (NumberFormatException e) {
                         date = "error";
                         year = -1;
                         month = -1;
                         day = -1;
-                        throw new NumberFormatException();
+//                        throw new NumberFormatException();
                     }
                     catch (ArrayIndexOutOfBoundsException e) {
                         
