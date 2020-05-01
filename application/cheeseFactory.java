@@ -1,5 +1,3 @@
-package application;
-
 import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
 
@@ -130,6 +128,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
             return -1;
         //recording data from selected farm
         double sum = 0;
+        //calculating the weight by looping through the list
         for (int i = 0; i < factory.size(); i++) {
             if (factory.get(i).getID().compareTo(farmID) == 0) {
                 sum += factory.get(i).weight;
@@ -145,6 +144,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
             return -1;
         //recording data from selected date
         double sum = 0;
+        //calculating the weight by looping through the list
         for (int i = 0; i < factory.size(); i++) {
             if (factory.get(i).getDate().compareTo(date) == 0) {
                 sum += factory.get(i).weight;
@@ -168,7 +168,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
         }
         if (mon < 1 || mon > 12)
             return -1;
-
+        //calculating the weight by looping through the list
         for (int i = 0; i < factory.size(); i++) {
             if (factory.get(i).month == mon) {
                 sum += factory.get(i).weight;
@@ -185,11 +185,12 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
         //recording data from selected farm
         double sum = 0;
         int yr = 0;
-        try {
+        try { //make sure the data is transfered 
             yr = Integer.parseInt(year.toString());
         } catch (NumberFormatException e) {
             return -2;
         }
+        //calculating the weight by looping through the list
         for (int i = 0; i < factory.size(); i++) {
             if (factory.get(i).year == yr) {
                 sum += factory.get(i).weight;
@@ -200,11 +201,12 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
 
     @Override
     public String[][] getAllData() {
+    	//array that will store all data
         String[][] allData = new String[factory.size()][3];
-        for (int i = 0; i < factory.size(); i++) {
-            allData[i][0] = factory.get(i).getDate().toString();
-            allData[i][1] = factory.get(i).getID().toString();
-            allData[i][2] = factory.get(i).getWeight().toString();
+        for (int i = 0; i < factory.size(); i++) { //looping the entire list
+            allData[i][0] = factory.get(i).getDate().toString();	//store date
+            allData[i][1] = factory.get(i).getID().toString();		//store farmID
+            allData[i][2] = factory.get(i).getWeight().toString();	//store weight
         }
         return allData;
     }
@@ -214,20 +216,20 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
      * inner class that records each piece of information
      */
     private class farm {
-        String farmID;
-        String date;
-        String weightStr;
-        int year;
-        int month;
-        int day;
-        int ID;
-        double weight;
+        String farmID;		//records farmid
+        String date;		//records date
+        String weightStr;	//records weight in string
+        int year;			//the year from date
+        int month;			//month from date
+        int day;			//day from date
+        int ID;				//the number after "farm"
+        double weight;		//stores the weight in double
 
         //the default constructor. Should never be called.
         public farm() {
-            farmID = "Dummy";
-            date = "Dummy";
-            weightStr = "Dummy";
+            farmID = "missing";
+            date = "missing";
+            weightStr = "missing";
         }
 
         //constructor that records all information and make sure in correct format
@@ -264,15 +266,18 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
                         year = Integer.parseInt(temp[0]);
                         month = Integer.parseInt(temp[1]);
                         day = Integer.parseInt(temp[2]);
+                        if(temp[1].length() < 2) {
+                        	temp[1] = "0" + temp[1];
+                        	this.date = temp[0] + "-" + temp[1] + "-" + temp[2];
+                        }
                     } catch (NumberFormatException e) {
                         date = "error";
                         year = -1;
                         month = -1;
                         day = -1;
-//                        throw new NumberFormatException();
                     }
                     catch (ArrayIndexOutOfBoundsException e) {
-                        
+                        //make sure if month or date is missing still works
                     } 
                 }
             }
@@ -282,6 +287,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
             } else {
                 //recording the id in FarmID
                 temp = new String[2];
+                //accepting all forms of "farm" that's considered in
                 if (!this.farmID.contains("farm") && !this.farmID.contains("Farm") && !this.farmID
                         .contains("FARM")) {
                     this.farmID = "error";
@@ -294,7 +300,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
                     id = "error";
                 }
 
-                if (flag) {
+                if (flag) { //all condition satisfies and the input is acceptable
                     try { //prevent the data is not in the form that could be converted into int
                         ID = Integer.parseInt(temp[1]);
                     } catch (NumberFormatException e) {
@@ -306,7 +312,7 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
                     }
                 }
             }
-
+            //checking if data is missing or not completed
             if (w.trim().isEmpty() || w.trim().equalsIgnoreCase("-")) {
                 this.weightStr = "missing";
             } else {
@@ -333,11 +339,11 @@ public class cheeseFactory<K extends Comparable<K>, V> implements dataStruct<K, 
             return true;
         }
 
+        //below are the setter and getter methods for convenience
         private K getDate() {
             return (K) date;
         }
 
-        //below are the setter and getter methods
         private void setDate(K dateN) {
             this.date = dateN.toString();
         }
