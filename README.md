@@ -14,7 +14,7 @@ special instructions -
   The date is expected to be complited. To be more specific, it should includ all three parts of "year" "month" and "day" and seperated by "-". If only a year or month is included and other parts is missing there will be an ArrayOutOfBoundsException. 
   The farm is expected to be in form of "Farm #" or "farm #" or "FARM #". The letter case matters, but if there is space between the number and the word farm does not.
   The weight should be in the same range as doubles in java. 
-  If there are any missing data from the input text, for example, "-" or just " "(blank) would be detected as missing data and would be recorded as a String "missing" in the data structure. All data in the wrong format such as "ASDGSDHN" for farm would be recorded as "error."
+  If there are any missing data from the input text, for example, "-" or just " "(blank) would be detected as missing data and would be recorded as a String "missing" in the data structure. All data in the wrong format such as "ASDGSDHN" for farmID would be recorded as "error."
 
 
 
